@@ -1,0 +1,300 @@
+{
+  "info": {
+    "_postman_id": "caddiepro-backend-seguimiento-2",
+    "name": "CaddiePro Backend API - Seguimiento 2 (MongoDB)",
+    "description": "Colección completa de pruebas para el Backend con Base de Datos MongoDB del proyecto CaddiePro (Fundación Club Campestre de Medellín y Llanogrande).\n\nIncluye endpoints para:\n- Health Check y Estadísticas\n- Carga masiva y poblado automático desde Excel\n- CRUD completo de Caddies (GET, POST, PUT, DELETE)\n- Actualización de Disponibilidad Semanal y Días de Estudio\n- Registro de Auditoría y Logs",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "0. Diagnóstico y Sistema",
+      "item": [
+        {
+          "name": "01. Health Check (Verificar MongoDB)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/health",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "health"]
+            },
+            "description": "Verifica el estado del servidor Express y la conexión en vivo con la base de datos MongoDB."
+          },
+          "response": []
+        },
+        {
+          "name": "02. Resumen & Estadísticas",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/caddies/stats",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "caddies", "stats"]
+            },
+            "description": "Muestra el conteo de caddies por deporte (Golf, Tenis, Híbrido) y por sede (Medellín, Llanogrande)."
+          },
+          "response": []
+        },
+        {
+          "name": "03. Poblar Base de Datos desde Excel",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/caddies/seed-excel",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "caddies", "seed-excel"]
+            },
+            "description": "Lee el archivo 'DIAS DE ACOMPAÑAMIENTOS BECARIOS.xlsx' y pobla/actualiza los 73 caddies directamente en MongoDB."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "1. Consultas de Caddies (GET)",
+      "item": [
+        {
+          "name": "01. Listar Todos los Caddies",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/caddies",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "caddies"]
+            },
+            "description": "Obtiene la lista completa de todos los caddies almacenados en MongoDB."
+          },
+          "response": []
+        },
+        {
+          "name": "02. Filtrar por Deporte (Golf)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/caddies?sport=Golf",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "caddies"],
+              "query": [
+                {
+                  "key": "sport",
+                  "value": "Golf"
+                }
+              ]
+            },
+            "description": "Filtra caddies registrados en la disciplina de Golf."
+          },
+          "response": []
+        },
+        {
+          "name": "03. Filtrar por Sede (Medellín)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/caddies?venue=Medellín",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "caddies"],
+              "query": [
+                {
+                  "key": "venue",
+                  "value": "Medellín"
+                }
+              ]
+            },
+            "description": "Filtra caddies asignados a la Sede Medellín."
+          },
+          "response": []
+        },
+        {
+          "name": "04. Buscar por Nombre o Cédula",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/caddies?search=GONZALEZ",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "caddies"],
+              "query": [
+                {
+                  "key": "search",
+                  "value": "GONZALEZ"
+                }
+              ]
+            },
+            "description": "Búsqueda textual por nombre o número de identificación."
+          },
+          "response": []
+        },
+        {
+          "name": "05. Obtener Caddie por Cédula / Documento",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/caddies/{{sampleDocId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "caddies", "{{sampleDocId}}"]
+            },
+            "description": "Obtiene el detalle completo de un caddie específico por su número de cédula."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "2. Crear Caddie (POST)",
+      "item": [
+        {
+          "name": "01. Crear Nuevo Caddie",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"documentId\": \"1099887766\",\n  \"name\": \"SANTIAGO MORALES GÓMEZ\",\n  \"sport\": \"Golf\",\n  \"category\": \"Categoría 1\",\n  \"venue\": \"Llanogrande\",\n  \"phone\": \"+57 312 987 6543\",\n  \"experience\": \"4 años\",\n  \"weeklyAvailability\": {\n    \"lunes\": \"AM\",\n    \"martes\": \"Estudia\",\n    \"miercoles\": \"PM\",\n    \"jueves\": \"Estudia\",\n    \"viernes\": \"AM\",\n    \"sabado\": \"AM\",\n    \"domingo\": \"PM\"\n  },\n  \"foundationNotes\": \"Beca de Rendimiento Deportivo - Fundación Club Campestre\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/caddies",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "caddies"]
+            },
+            "description": "Registra un nuevo caddie en la base de datos MongoDB con todas sus validaciones."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "3. Actualizar Caddie (PUT)",
+      "item": [
+        {
+          "name": "01. Actualizar Datos Generales de Caddie",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"phone\": \"+57 320 111 2233\",\n  \"venue\": \"Medellín\",\n  \"category\": \"Categoría 1\",\n  \"experience\": \"5 años\",\n  \"foundationNotes\": \"Actualización de datos de contacto y cambio a Sede Medellín con beca de excelencia.\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/caddies/1099887766",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "caddies", "1099887766"]
+            },
+            "description": "Actualiza la información personal, categoría o sede de un caddie."
+          },
+          "response": []
+        },
+        {
+          "name": "02. Actualizar Disponibilidad y Días de Estudio",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"weeklyAvailability\": {\n    \"lunes\": \"Estudia\",\n    \"martes\": \"AM\",\n    \"miercoles\": \"Estudia\",\n    \"jueves\": \"PM\",\n    \"viernes\": \"AM\",\n    \"sabado\": \"AM\",\n    \"domingo\": \"Descanso\"\n  },\n  \"foundationNotes\": \"Horario de universidad ajustado: Clases presenciales Lunes y Miércoles en la mañana.\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/caddies/{{sampleDocId}}/availability",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "caddies", "{{sampleDocId}}", "availability"]
+            },
+            "description": "Permite ajustar los turnos de acompañamiento y días de estudio del becario."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "4. Eliminar Caddie (DELETE)",
+      "item": [
+        {
+          "name": "01. Eliminar Caddie por Cédula / ID",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/caddies/1099887766",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "caddies", "1099887766"]
+            },
+            "description": "Elimina un caddie de la base de datos MongoDB."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "5. Logs y Auditoría",
+      "item": [
+        {
+          "name": "01. Obtener Historial de Logs",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/logs",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "logs"]
+            },
+            "description": "Obtiene la lista de acciones registradas en el sistema (auditoría de cambios)."
+          },
+          "response": []
+        },
+        {
+          "name": "02. Registrar Log Manual",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"action\": \"Validación Postman Seguimiento 2\",\n  \"detail\": \"Prueba de endpoints exitosa con MongoDB local.\",\n  \"type\": \"admin\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/logs",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "logs"]
+            },
+            "description": "Crea una entrada manual en la bitácora de actividad."
+          },
+          "response": []
+        }
+      ]
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:5000"
+    },
+    {
+      "key": "sampleDocId",
+      "value": "1011512703"
+    }
+  ]
+}

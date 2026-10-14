@@ -1,0 +1,834 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Examen 1: Primera Entrega del Proyecto - CaddiePro</title>
+<style>
+  @page {
+    size: letter;
+    margin: 2.2cm 2.54cm 2.2cm 2.54cm;
+  }
+
+  * {
+    box-sizing: border-box;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  body {
+    font-family: Calibri, 'Segoe UI', Arial, sans-serif;
+    font-size: 10.5pt;
+    line-height: 1.42;
+    color: #1a1a1a;
+    background-color: #ffffff;
+    margin: 0;
+    padding: 0;
+  }
+
+  /* Force exact page break */
+  .page-sheet {
+    page-break-after: always;
+    break-after: page;
+    height: 23.2cm;
+    max-height: 23.2cm;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    overflow: hidden;
+  }
+
+  .page-sheet:last-of-type {
+    page-break-after: avoid;
+    break-after: avoid;
+  }
+
+  .page-body {
+    flex-grow: 1;
+  }
+
+  .page-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-top: 1px solid #cbd5e1;
+    padding-top: 4px;
+    font-size: 8.5pt;
+    color: #64748b;
+  }
+
+  /* Cover Page */
+  .cover-container {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    text-align: center;
+    padding: 3.5cm 0 1cm 0;
+  }
+
+  .cover-title-area h1 {
+    font-size: 18pt;
+    font-weight: bold;
+    color: #0d1117;
+    margin: 0 0 8px 0;
+    line-height: 1.25;
+  }
+
+  .cover-title-area h2 {
+    font-size: 15pt;
+    font-weight: bold;
+    color: #082F22;
+    margin: 0 0 10px 0;
+  }
+
+  .cover-title-area h3 {
+    font-size: 12pt;
+    font-weight: normal;
+    color: #475569;
+    margin: 0;
+  }
+
+  .cover-authors-area {
+    margin: 2.5cm 0;
+    font-size: 12pt;
+    font-weight: bold;
+    color: #1e293b;
+  }
+
+  .cover-inst-area {
+    font-size: 11pt;
+    color: #334155;
+    line-height: 1.45;
+  }
+
+  /* Headings */
+  h1.sec-title {
+    font-size: 13pt;
+    font-weight: bold;
+    color: #082F22;
+    border-bottom: 2px solid #082F22;
+    padding-bottom: 2px;
+    margin: 0 0 8px 0;
+  }
+
+  h2.subsec-title {
+    font-size: 11pt;
+    font-weight: bold;
+    color: #082F22;
+    margin: 8px 0 4px 0;
+  }
+
+  p {
+    margin: 0 0 6px 0;
+    text-align: justify;
+    text-justify: inter-word;
+  }
+
+  ul, ol {
+    margin: 3px 0 6px 18px;
+    padding: 0;
+  }
+
+  li {
+    margin-bottom: 3px;
+    text-align: justify;
+  }
+
+  /* Tables */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 6px 0 8px 0;
+    font-size: 9pt;
+  }
+
+  th, td {
+    border: 1px solid #cbd5e1;
+    padding: 4px 8px;
+    text-align: left;
+    vertical-align: top;
+  }
+
+  th {
+    background-color: #082F22;
+    color: #ffffff;
+    font-weight: bold;
+  }
+
+  tr:nth-child(even) {
+    background-color: #f8fafc;
+  }
+
+  /* Diagrams & Flow */
+  .flow-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 6px;
+    margin: 6px 0;
+  }
+
+  .flow-node {
+    flex: 1;
+    background: #ffffff;
+    border: 1.5px solid #24523B;
+    border-radius: 5px;
+    padding: 5px 4px;
+    text-align: center;
+    font-size: 8pt;
+    font-weight: bold;
+    color: #082F22;
+  }
+
+  .flow-arr {
+    font-size: 12pt;
+    color: #3FB65E;
+    font-weight: bold;
+  }
+
+  /* Mockup Cards */
+  .mockups-2col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin: 6px 0;
+  }
+
+  .m-card {
+    border: 1px solid #cbd5e1;
+    border-radius: 6px;
+    background: #ffffff;
+    overflow: hidden;
+  }
+
+  .m-head {
+    background: #082F22;
+    color: #ffffff;
+    padding: 4px 8px;
+    font-size: 8pt;
+    font-weight: bold;
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .m-body {
+    padding: 6px 8px;
+    font-size: 8pt;
+  }
+
+  .tag {
+    display: inline-block;
+    padding: 1px 5px;
+    border-radius: 3px;
+    font-size: 7pt;
+    font-weight: bold;
+    margin-right: 3px;
+  }
+  .tag-am { background: #d1fae5; color: #065f46; }
+  .tag-pm { background: #dbeafe; color: #1e40af; }
+  .tag-est { background: #fef3c7; color: #92400e; }
+  .tag-des { background: #f1f5f9; color: #475569; }
+
+  .b-must {
+    background-color: #082F22;
+    color: white;
+    font-weight: bold;
+    padding: 1px 5px;
+    border-radius: 3px;
+    font-size: 7.5pt;
+  }
+
+  .b-should {
+    background-color: #3FB65E;
+    color: #082F22;
+    font-weight: bold;
+    padding: 1px 5px;
+    border-radius: 3px;
+    font-size: 7.5pt;
+  }
+
+  .ref-entry {
+    margin-bottom: 8px;
+    padding-left: 22px;
+    text-indent: -22px;
+    font-size: 9.5pt;
+    line-height: 1.4;
+  }
+</style>
+</head>
+<body>
+
+  <!-- ============================================================== -->
+  <!-- HOJA 1: PORTADA                                                -->
+  <!-- ============================================================== -->
+  <div class="page-sheet">
+    <div class="page-body cover-container">
+      <div class="cover-title-area">
+        <h1>Examen 1: Primera Entrega Incremental del Proyecto</h1>
+        <h2>Sistema de Gestión de Horarios y Disponibilidad de Caddies (CaddiePro)</h2>
+        <h3>Diseño Inicial de una Aplicación Móvil</h3>
+        <p style="margin-top: 14px; color: #64748b; font-style: italic; font-size: 10pt;">
+          Proyecto Integrador • Gestión de Horarios Deportivos y Soporte Formativo
+        </p>
+      </div>
+
+      <div class="cover-authors-area">
+        Juan Miguel Duarte &amp; Jerónimo Mesa Carvajal
+      </div>
+
+      <div class="cover-inst-area">
+        Corporación Universitaria Lasallista<br>
+        Facultad de Ingenierías<br>
+        Desarrollo de Aplicaciones Móviles<br>
+        Septiembre de 2026
+      </div>
+    </div>
+
+    <div class="page-footer">
+      <span>Devs - Juan Miguel Duarte - Jeronimo Mesa</span>
+      <span>Página 1</span>
+    </div>
+  </div>
+
+  <!-- ============================================================== -->
+  <!-- HOJA 2: SECCIÓN 1 (NECESIDAD Y SOLUCIÓN PROPUESTA)            -->
+  <!-- ============================================================== -->
+  <div class="page-sheet">
+    <div class="page-body">
+      <h1 class="sec-title">1. Necesidad y Solución Propuesta</h1>
+
+      <h2 class="subsec-title">1.1. Contexto y Descripción del Problema</h2>
+      <p>
+        En el ámbito deportivo de la <strong>Fundación Club Campestre de Medellín y Llanogrande</strong>, la coordinación de la disponibilidad, asignación de turnos y rotación de los caddies (asistentes de golf y tenis) se ha gestionado tradicionalmente mediante formatos impresos, carteleras murales o grupos informales de mensajería instantánea. Esta práctica ocasiona vulnerabilidades críticas en la oportunidad de respuesta, altos costos de desplazamiento innecesario para los trabajadores y severa desinformación operativa entre las dos sedes del club.
+      </p>
+      <p>
+        Un factor de especial impacto estriba en que un porcentaje representativo de los auxiliares pertenece al programa de becas y tutorías formativas de la Fundación. La carencia de un sistema unificado y en tiempo real provoca cruces sistemáticos entre las jornadas en campo y las horas de estudio obligatorio, afectando el desempeño académico de los jóvenes beneficiarios y generando demoras en la atención deportiva.
+      </p>
+
+      <h2 class="subsec-title">1.2. Principales Usuarios e Interesados (Stakeholders)</h2>
+      <table>
+        <thead>
+          <tr>
+            <th style="width: 22%;">Interesado</th>
+            <th style="width: 38%;">Relación con el Problema</th>
+            <th style="width: 40%;">Expectativas en la Solución Móvil</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Caddie (Golf / Tenis)</strong></td>
+            <td>Sufre la incertidumbre de traslados sin certeza de asignación; requiere compatibilizar turnos con estudio.</td>
+            <td>Consulta exprés desde su móvil ingresando solo su cédula; visualización clara de turnos AM y PM.</td>
+          </tr>
+          <tr>
+            <td><strong>Caddie Master / Coordinador</strong></td>
+            <td>Desgaste administrativo diario elaborando planillas manuales y resolviendo solapamientos de turnos.</td>
+            <td>Panel administrativo con PIN, plantillas rápidas (presets) y edición semanal de disponibilidad.</td>
+          </tr>
+          <tr>
+            <td><strong>Comité de Bienestar (Fundación)</strong></td>
+            <td>Falta de métricas consolidadas sobre el cumplimiento de becas formativas y horas de clase.</td>
+            <td>Trazabilidad de horarios de tutoría académica y auditoría de modificaciones en tiempo real.</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h2 class="subsec-title">1.3. Pertinencia de una Aplicación Móvil</h2>
+      <p>
+        La solución móvil resulta idónea debido a que los caddies desempeñan su labor al aire libre en los campos y no disponen de estaciones fijas de cómputo. Una interfaz móvil con enfoque <em>Mobile-First</em> permite acceder a los turnos en segundos antes de salir de sus hogares, reduciendo el ausentismo y agilizando la operación. Además, la arquitectura móvil permite operar de forma desconectada (<em>offline</em>) ante la pérdida recurrente de cobertura celular en zonas abiertas de los campos de golf.
+      </p>
+
+      <h2 class="subsec-title">1.4. Descripción Técnica de la Solución Propuesta</h2>
+      <p>
+        La propuesta consiste en la plataforma móvil <strong>CaddiePro</strong>, concebida para integrar la consulta pública y la administración operativa. CaddiePro provee: (a) un módulo de consulta pública donde el usuario ingresa su cédula y obtiene de inmediato su calendario mensual de turnos codificado por colores (AM, PM, Estudia, Descanso), y (b) un panel protegido con código PIN para que la administración gestione el roster general, registre nuevos caddies, aplique plantillas de asignación automática y preserve los horarios de estudio.
+      </p>
+    </div>
+
+    <div class="page-footer">
+      <span>Proyecto CaddiePro - Entrega 1</span>
+      <span>Página 2</span>
+    </div>
+  </div>
+
+  <!-- ============================================================== -->
+  <!-- HOJA 3: SECCIÓN 2 (ALCANCE Y MVP) Y SECCIÓN 3 (REQUERIMIENTOS) -->
+  <!-- ============================================================== -->
+  <div class="page-sheet">
+    <div class="page-body">
+      <h1 class="sec-title">2. Alcance y Producto Mínimo Viable (MVP)</h1>
+      <p>
+        El MVP delimita de forma estricta las funcionalidades nucleares necesarias para digitalizar la operación con mínima fricción para los trabajadores:
+      </p>
+      <ul>
+        <li><strong>F01 - Consulta Pública Exprés por Identificación:</strong> Búsqueda de turnos ingresando la cédula, sin requerir contraseñas ni registros previos para los auxiliares.</li>
+        <li><strong>F02 - Calendario Mensual de 4 Estados:</strong> Cuadrícula del mes con código cromático: ☀️ Turno AM (06:00-13:30), ⛅ Turno PM (12:30-19:00), 🎓 Estudia (Tutoría Fundación) y ☕ Descanso.</li>
+        <li><strong>F03 - Detalle Diario y Notas de Fundación:</strong> Consulta de la jornada específica al tocar cualquier día, desplegando observaciones de beca académica.</li>
+        <li><strong>F04 - Panel Administrativo con Autenticación PIN:</strong> Ingreso protegido para coordinadores mediante código numérico de seguridad.</li>
+        <li><strong>F05 - Roster y Editor Semanal con Presets:</strong> Matriz interactiva de Lunes a Domingo con aplicación automatizada de patrones (Todos AM, Todos PM, Alternar, Fin de Semana PM).</li>
+      </ul>
+      <p>
+        <strong>Funciones Diferidas (v2.0+):</strong> Notificaciones push 24h antes del turno (F06), escáner de código QR del carnet físico mediante cámara (F07) y validación de asistencia por geocerca GPS (F08).
+      </p>
+
+      <h1 class="sec-title" style="margin-top: 10px;">3. Requerimientos del Sistema</h1>
+      <h2 class="subsec-title">3.1. Requerimientos Funcionales (RF)</h2>
+      <ul>
+        <li><strong>RF-01:</strong> El sistema debe permitir la consulta de horario mediante el ingreso de la cédula del caddie.</li>
+        <li><strong>RF-02:</strong> La interfaz debe calcular y desplegar dinámicamente la cuadrícula del calendario mensual.</li>
+        <li><strong>RF-03:</strong> Al pulsar un día, el sistema debe desplegar el detalle horario y las notas de tutoría académica.</li>
+        <li><strong>RF-04:</strong> El sistema debe restringir el acceso al panel administrativo mediante un PIN de seguridad.</li>
+        <li><strong>RF-05:</strong> El panel debe filtrar el catálogo en tiempo real por nombre, documento, categoría y sede.</li>
+        <li><strong>RF-06:</strong> El coordinador debe poder configurar la disponibilidad individual para cada uno de los 7 días.</li>
+        <li><strong>RF-07:</strong> La plataforma debe proveer plantillas de asignación rápida para turnos homogéneos y rotativos.</li>
+        <li><strong>RF-08:</strong> El sistema debe registrar nuevos caddies y almacenar logs cronológicos de auditoría.</li>
+      </ul>
+
+      <h2 class="subsec-title">3.2. Requerimientos No Funcionales (RNF)</h2>
+      <ul>
+        <li><strong>RNF-01 (Rendimiento):</strong> El tiempo de búsqueda y renderizado en pantalla no debe superar los 250 ms.</li>
+        <li><strong>RNF-02 (Persistencia Offline):</strong> Operación plena sin conexión mediante LocalStorage y caché del cliente.</li>
+        <li><strong>RNF-03 (Usabilidad Mobile-First):</strong> Diseño adaptativo táctil con targets mínimos de 44×44 px y modo claro/oscuro.</li>
+        <li><strong>RNF-04 (Seguridad):</strong> Sanitización numérica de entradas y protección de datos según la Ley 1581 de 2012.</li>
+      </ul>
+    </div>
+
+    <div class="page-footer">
+      <span>Proyecto CaddiePro - Entrega 1</span>
+      <span>Página 3</span>
+    </div>
+  </div>
+
+  <!-- ============================================================== -->
+  <!-- HOJA 4: SECCIÓN 4 (DECISIONES MÓVILES) Y SECCIÓN 5 (FLUJOS)   -->
+  <!-- ============================================================== -->
+  <div class="page-sheet">
+    <div class="page-body">
+      <h1 class="sec-title">4. Decisiones de Desarrollo Móvil</h1>
+
+      <h2 class="subsec-title">4.1. Plataforma Objetivo: Android e iOS Simultáneos</h2>
+      <p>
+        Se definió un alcance <strong>multiplataforma unificado</strong>. El personal de la Fundación utiliza dispositivos muy heterogéneos (teléfonos Android económicos de diversas marcas y terminales iPhone). Optar por una sola plataforma nativa excluiría arbitrariamente a más del 40% de los beneficiarios del programa.
+      </p>
+
+      <h2 class="subsec-title">4.2. Estrategia Tecnológica: Progressive Web App (PWA)</h2>
+      <p>
+        Se seleccionó el modelo de <strong>Progressive Web App (PWA)</strong> implementado con HTML5 semántico, JavaScript reactivo modular y CSS3/Tailwind Tokens. Justificación técnica:
+      </p>
+      <ul>
+        <li><strong>Cero Fricción de Despliegue:</strong> Los caddies acceden mediante enlace web o código QR e instalan la app en su pantalla de inicio en un toque, sin requerir cuentas de Google Play ni App Store.</li>
+        <li><strong>Mínimo Consumo de Datos:</strong> El bundle completo pesa menos de 180 KB, facilitando su carga con planes prepago o conectividad móvil reducida.</li>
+        <li><strong>Portabilidad Futura:</strong> La estructura modular permite su compilación inmediata con Capacitor o Ionic si se requiere acceso a hardware nativo avanzado en versiones incrementales.</li>
+      </ul>
+
+      <h2 class="subsec-title">4.3. Capacidades y APIs del Dispositivo Aprovechadas</h2>
+      <ul>
+        <li><strong>Web Storage API (LocalStorage):</strong> Persistencia del catálogo y matrices semanales para soporte sin internet.</li>
+        <li><strong>Vibration API / Notificaciones Hápticas:</strong> Confirmación física instantánea al guardar turnos o detectar errores.</li>
+        <li><strong>Modo Standalone y Viewport:</strong> Ejecución a pantalla completa eliminando barras de navegador.</li>
+      </ul>
+
+      <h1 class="sec-title" style="margin-top: 8px;">5. Flujos de Navegación del Usuario</h1>
+
+      <h2 class="subsec-title">5.1. Flujo de Consulta Pública del Caddie</h2>
+      <div class="flow-row">
+        <div class="flow-node">1. Pantalla Inicio<br><small>Ingreso Documento</small></div>
+        <div class="flow-arr">➔</div>
+        <div class="flow-node">2. Validación<br><small>Filtro Numérico</small></div>
+        <div class="flow-arr">➔</div>
+        <div class="flow-node">3. Calendario<br><small>Cuadrícula AM/PM</small></div>
+        <div class="flow-arr">➔</div>
+        <div class="flow-node">4. Detalle Día<br><small>Horario y Notas</small></div>
+      </div>
+
+      <h2 class="subsec-title">5.2. Flujo de Asignación y Gestión Administrativa</h2>
+      <div class="flow-row">
+        <div class="flow-node">1. Login Admin<br><small>PIN de Seguridad</small></div>
+        <div class="flow-arr">➔</div>
+        <div class="flow-node">2. Dashboard<br><small>Roster y Métricas</small></div>
+        <div class="flow-arr">➔</div>
+        <div class="flow-node">3. Matriz Semanal<br><small>Presets o Manual</small></div>
+        <div class="flow-arr">➔</div>
+        <div class="flow-node">4. Guardado<br><small>Persistencia y Log</small></div>
+      </div>
+    </div>
+
+    <div class="page-footer">
+      <span>Proyecto CaddiePro - Entrega 1</span>
+      <span>Página 4</span>
+    </div>
+  </div>
+
+  <!-- ============================================================== -->
+  <!-- HOJA 5: SECCIÓN 5.3 (WIREFRAMES Y MOCKUPS - PARTE 1)          -->
+  <!-- ============================================================== -->
+  <div class="page-sheet">
+    <div class="page-body">
+      <h1 class="sec-title">5.3. Wireframes y Mockups de las Vistas Principales (Parte 1)</h1>
+      <p>
+        La interfaz de usuario prioriza la agilidad táctil y la coherencia visual en sus vistas principales:
+      </p>
+
+      <div class="mockups-2col">
+        <!-- VISTA 1 -->
+        <div class="m-card">
+          <div class="m-head">
+            <span>VISTA 1: CONSULTA PÚBLICA</span>
+            <span>[☀️/🌙 Modo]</span>
+          </div>
+          <div class="m-body">
+            <div style="text-align:center; margin:4px 0;">
+              <div style="display:inline-block; background:#24523B; color:#85FB9A; padding:4px 10px; border-radius:6px; font-weight:bold; font-size:8pt;">⛳ CaddiePro</div>
+              <p style="font-size:7pt; color:#64748b; margin-top:2px;">Fundación Club Campestre</p>
+            </div>
+            <div style="border:1px solid #cbd5e1; border-radius:5px; padding:6px; background:#f8fafc; margin:4px 0;">
+              <label style="font-size:7pt; font-weight:bold; color:#475569;">NÚMERO DE DOCUMENTO:</label>
+              <div style="border:1.5px solid #24523B; background:#fff; text-align:center; font-weight:bold; font-size:11pt; padding:3px; border-radius:4px; margin-top:2px; color:#082F22;">
+                10203040
+              </div>
+              <button style="width:100%; background:#082F22; color:#fff; border:none; padding:5px; border-radius:4px; font-weight:bold; font-size:7.5pt; margin-top:4px;">
+                🔍 CONSULTAR HORARIO
+              </button>
+            </div>
+            <div style="font-size:6.5pt; color:#64748b; margin-top:2px;">
+              <strong>Perfiles Demo:</strong> [Juan Pérez] [Carlos R.] [Sarah J.]
+            </div>
+          </div>
+        </div>
+
+        <!-- VISTA 2 -->
+        <div class="m-card">
+          <div class="m-head">
+            <span>VISTA 2: CALENDARIO MENSUAL</span>
+            <span>[← Volver]</span>
+          </div>
+          <div class="m-body">
+            <div style="background:#082F22; color:#fff; padding:4px 6px; border-radius:4px; margin-bottom:4px;">
+              <strong>Juan Pérez</strong> <span style="font-size:6.5pt; background:rgba(255,255,255,0.2); padding:1px 3px; border-radius:2px;">Cat. 1</span><br>
+              <span style="font-size:6.5pt; color:#85FB9A;">Doc: 10203040 • Sede Llanogrande</span>
+            </div>
+            <div style="text-align:center; font-weight:bold; font-size:7.5pt; margin-bottom:2px;">&lt; Septiembre 2026 &gt;</div>
+            <div style="margin-bottom:4px;">
+              <span class="tag tag-am">☀️ AM</span>
+              <span class="tag tag-pm">⛅ PM</span>
+              <span class="tag tag-est">🎓 Estudia</span>
+              <span class="tag tag-des">☕ Desc.</span>
+            </div>
+            <div style="display:grid; grid-template-columns:repeat(7,1fr); gap:1px; text-align:center; font-size:6.5pt; font-weight:bold;">
+              <div>L</div><div>M</div><div>M</div><div>J</div><div>V</div><div>S</div><div>D</div>
+              <div style="background:#d1fae5; border-radius:2px;">1<br>AM</div>
+              <div style="background:#fef3c7; border-radius:2px;">2<br>Est</div>
+              <div style="background:#dbeafe; border-radius:2px;">3<br>PM</div>
+              <div style="background:#fef3c7; border-radius:2px;">4<br>Est</div>
+              <div style="background:#d1fae5; border-radius:2px;">5<br>AM</div>
+              <div style="background:#d1fae5; border-radius:2px;">6<br>AM</div>
+              <div style="background:#dbeafe; border-radius:2px;">7<br>PM</div>
+            </div>
+            <div style="border:1px solid #cbd5e1; border-radius:4px; padding:3px; margin-top:4px; font-size:6.5pt; background:#f8fafc;">
+              <strong>Miércoles 2:</strong> ☀️ Turno AM (06:00 - 13:30)<br>
+              🎓 <em>Beca deportiva Fundación Club Campestre.</em>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="mockups-2col">
+        <!-- VISTA 3 -->
+        <div class="m-card">
+          <div class="m-head">
+            <span>VISTA 3: LOGIN ADMIN</span>
+            <span>[🔒 Seguro]</span>
+          </div>
+          <div class="m-body" style="text-align:center;">
+            <div style="font-size:16pt; margin:2px 0;">🛡️</div>
+            <strong style="font-size:8pt; color:#082F22;">Acceso Administrativo</strong>
+            <p style="font-size:7pt; color:#64748b; margin:1px 0 4px 0;">Exclusivo para Club Managers y Coordinadores</p>
+            <div style="width:85%; margin:0 auto; text-align:left;">
+              <label style="font-size:6.5pt; font-weight:bold;">PIN DE ACCESO:</label>
+              <div style="border:1.5px solid #24523B; background:#f8fafc; font-size:12pt; letter-spacing:3px; text-align:center; padding:2px; border-radius:4px; margin:2px 0;">
+                ••••
+              </div>
+              <button style="width:100%; background:#082F22; color:#fff; border:none; padding:4px; border-radius:4px; font-weight:bold; font-size:7.5pt; margin-top:2px;">
+                INGRESAR AL PANEL →
+              </button>
+              <p style="font-size:6.5pt; color:#3FB65E; margin-top:3px; text-align:center;">⚡ Autocompletar PIN Demo (1234)</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- VISTA 4 -->
+        <div class="m-card">
+          <div class="m-head">
+            <span>VISTA 4: DASHBOARD &amp; ROSTER</span>
+            <span>[+ Nuevo] [Salir]</span>
+          </div>
+          <div class="m-body">
+            <div style="display:grid; grid-template-columns:repeat(4,1fr); gap:2px; text-align:center; margin-bottom:4px;">
+              <div style="background:#f1f5f9; padding:2px; border-radius:3px; font-size:6pt;"><strong>8</strong><br>Caddies</div>
+              <div style="background:#d1fae5; padding:2px; border-radius:3px; font-size:6pt; color:#065f46;"><strong>24</strong><br>Turnos AM</div>
+              <div style="background:#dbeafe; padding:2px; border-radius:3px; font-size:6pt; color:#1e40af;"><strong>18</strong><br>Turnos PM</div>
+              <div style="background:#fef3c7; padding:2px; border-radius:3px; font-size:6pt; color:#92400e;"><strong>4</strong><br>Estudian</div>
+            </div>
+            <div style="border:1px solid #cbd5e1; border-radius:3px; padding:2px 4px; font-size:6.5pt; color:#64748b; margin-bottom:3px;">
+              🔍 Buscar por nombre, cédula o sede...
+            </div>
+            <div style="border:1px solid #e2e8f0; border-radius:3px; padding:3px; font-size:6.5pt;">
+              <strong>Carlos Ramírez</strong> (50607080) - Llanogrande<br>
+              <span class="tag tag-est">L:Est</span><span class="tag tag-am">M:AM</span><span class="tag tag-pm">X:PM</span>
+              <button style="float:right; background:#24523B; color:#fff; border:none; padding:1px 4px; border-radius:2px; font-size:6pt;">Editar</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="page-footer">
+      <span>Proyecto CaddiePro - Entrega 1</span>
+      <span>Página 5</span>
+    </div>
+  </div>
+
+  <!-- ============================================================== -->
+  <!-- HOJA 6: SECCIÓN 5.4 (WIREFRAMES PARTE 2) Y SECCIÓN 6 (ARQUITECTURA) -->
+  <!-- ============================================================== -->
+  <div class="page-sheet">
+    <div class="page-body">
+      <h1 class="sec-title">5.4. Wireframes y Mockups de las Vistas Principales (Parte 2)</h1>
+
+      <div class="mockups-2col">
+        <!-- VISTA 5 -->
+        <div class="m-card">
+          <div class="m-head">
+            <span>VISTA 5: GESTIÓN DE HORARIO</span>
+            <span>[← Roster]</span>
+          </div>
+          <div class="m-body">
+            <strong style="font-size:7.5pt;">Carlos Ramírez</strong> (Categoría 2)<br>
+            <span style="font-size:6.5pt; color:#64748b;">Balance: 2 AM • 2 PM • 2 Estudia • 1 Descanso</span>
+            <div style="border:1px solid #cbd5e1; border-radius:3px; padding:3px; margin:3px 0; background:#f8fafc; font-size:6.5pt;">
+              <strong>Plantillas Rápidas:</strong>
+              <button style="font-size:6pt; padding:1px 3px; border:1px solid #3FB65E; background:#fff; border-radius:2px;">☀️ AM</button>
+              <button style="font-size:6pt; padding:1px 3px; border:1px solid #3b82f6; background:#fff; border-radius:2px;">⛅ PM</button>
+              <button style="font-size:6pt; padding:1px 3px; border:1px solid #a855f7; background:#fff; border-radius:2px;">🔄 Alt</button>
+            </div>
+            <div style="font-size:6.5pt; line-height:1.35;">
+              • Lunes: <strong>[ 🎓 Estudia (Fundación) ▼ ]</strong><br>
+              • Martes: <strong>[ ☀️ Turno AM (Mañana) ▼ ]</strong><br>
+              • Miércoles: <strong>[ ⛅ Turno PM (Tarde) ▼ ]</strong><br>
+              • Jueves: <strong>[ ☀️ Turno AM (Mañana) ▼ ]</strong><br>
+              • Viernes: <strong>[ ⛅ Turno PM (Tarde) ▼ ]</strong><br>
+              • Sábado: <strong>[ ☀️ Turno AM (Mañana) ▼ ]</strong><br>
+              • Domingo: <strong>[ ☕ Descanso ▼ ]</strong>
+            </div>
+            <div style="margin-top:4px; text-align:right;">
+              <button style="background:#082F22; color:#fff; border:none; padding:3px 6px; border-radius:2px; font-weight:bold; font-size:7pt;">💾 Guardar</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- VISTA 6 -->
+        <div class="m-card">
+          <div class="m-head">
+            <span>VISTA 6: MODAL Y AUDITORÍA</span>
+            <span>[Log Activo]</span>
+          </div>
+          <div class="m-body">
+            <strong style="font-size:7.5pt; color:#082F22;">Registrar Nuevo Caddie</strong>
+            <div style="border:1px solid #cbd5e1; border-radius:3px; padding:4px; margin:2px 0; font-size:6.5pt; background:#fff;">
+              Nombre: [ Roberto Gómez ] Cédula: [ 10987654 ]<br>
+              Sede: [ Llanogrande ▼ ] Cat: [ Cat 1 ▼ ] Tel: [ 300... ]<br>
+              Notas: [ Programa formativo Fundación ]
+              <div style="text-align:right; margin-top:2px;">
+                <button style="background:#082F22; color:#fff; border:none; padding:1px 4px; border-radius:2px; font-size:6pt;">Guardar</button>
+              </div>
+            </div>
+            <strong style="font-size:7pt; color:#082F22;">Registro de Actividad (Logs):</strong>
+            <div style="border-top:1px solid #ddd; padding-top:2px; font-size:6pt; color:#475569;">
+              • 07:00 AM - <em>Horario Consultado:</em> Juan Pérez consultó turno.<br>
+              • 07:15 AM - <em>Disponibilidad Actualizada:</em> Ajuste para Carlos Ramírez.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <h1 class="sec-title" style="margin-top: 10px;">6. Arquitectura Inicial de Software</h1>
+      <h2 class="subsec-title">6.1. Patrón Arquitectónico de Referencia: Model-View-ViewModel (MVVM)</h2>
+      <p>
+        La arquitectura adopta el patrón <strong>MVVM</strong>, desacoplando la interfaz visual de las reglas de negocio y los datos:
+      </p>
+
+      <div style="background:#f8fafc; border:1px solid #cbd5e1; border-radius:5px; padding:6px; margin:6px 0;">
+        <div style="display:flex; justify-content:space-between; text-align:center; font-size:8pt;">
+          <div style="flex:1; border:1.5px solid #24523B; padding:5px; border-radius:4px; background:#fff; margin-right:4px;">
+            <strong>CAPA DE VISTA (UI/DOM)</strong><br>
+            <code>index.html / styles.css</code><br>
+            <small>Vistas responsivas, captura de eventos y tokens visuales.</small>
+          </div>
+          <div style="align-self:center; font-size:12pt; color:#3FB65E; font-weight:bold;">⇄</div>
+          <div style="flex:1; border:1.5px solid #082F22; padding:5px; border-radius:4px; background:#fff; margin:0 4px;">
+            <strong>VIEWMODEL (Lógica/Estado)</strong><br>
+            <code>app.js (App Controller)</code><br>
+            <small>Enrutador, cálculo de calendario, PIN y presets.</small>
+          </div>
+          <div style="align-self:center; font-size:12pt; color:#3FB65E; font-weight:bold;">⇄</div>
+          <div style="flex:1; border:1.5px solid #24523B; padding:5px; border-radius:4px; background:#fff; margin-left:4px;">
+            <strong>MODELO (Datos)</strong><br>
+            <code>data.js (DataService)</code><br>
+            <small>Esquemas caddies, persistencia LocalStorage y logs.</small>
+          </div>
+        </div>
+      </div>
+      <p style="font-size:9pt; margin-bottom:0;">
+        <strong>Separación de Responsabilidades:</strong> La vista carece de lógica de negocio; el ViewModel gestiona el estado reactivo (`currentView`, `selectedDay`) y delega la persistencia a la interfaz `DataService`.
+      </p>
+    </div>
+
+    <div class="page-footer">
+      <span>Proyecto CaddiePro - Entrega 1</span>
+      <span>Página 6</span>
+    </div>
+  </div>
+
+  <!-- ============================================================== -->
+  <!-- HOJA 7: SECCIÓN 7 (CALIDAD) Y SECCIÓN 8 (BACKLOG MOSCOW)       -->
+  <!-- ============================================================== -->
+  <div class="page-sheet">
+    <div class="page-body">
+      <h1 class="sec-title">7. Consideraciones de Calidad y Atributos Técnicos</h1>
+      <p>
+        El diseño del sistema satisface cuatro pilares de calidad fundamentales para operaciones en campo:
+      </p>
+      <ul>
+        <li><strong>Conectividad Offline-First:</strong> El catálogo y las matrices semanales se almacenan en el cliente (`LocalStorage`), permitiendo consultas ininterrumpidas aún con baja señal celular en los campos de golf.</li>
+        <li><strong>Compatibilidad Multiplataforma y Viewport:</strong> Maquetación elástica optimizada para pantallas táctiles desde 360px de ancho, con áreas de toque ergonómicas mínimas de 44×44 px.</li>
+        <li><strong>Seguridad y Privacidad (Ley 1581 de 2012):</strong> Consulta pública acotada a datos operativos laborales (sin exhibir direcciones ni teléfonos), protegiendo la parametrización mediante PIN administrativo.</li>
+        <li><strong>Accesibilidad y Confort Visual (WCAG 2.1 AA):</strong> Soporte de Modo Claro / Modo Oscuro para facilitar la lectura bajo luz solar directa, garantizando un ratio de contraste cromático superior a 4.5:1.</li>
+      </ul>
+
+      <h1 class="sec-title" style="margin-top: 8px;">8. Backlog Preliminar del Producto (Metodología MoSCoW)</h1>
+      <table>
+        <thead>
+          <tr>
+            <th style="width: 10%;">ID</th>
+            <th style="width: 46%;">Descripción del Elemento del Backlog</th>
+            <th style="width: 14%;">MoSCoW</th>
+            <th style="width: 30%;">Criterio de Finalización</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>BL-01</strong></td>
+            <td>Diseño del esquema de datos estructurado y normalizado para caddies.</td>
+            <td><span class="b-must">Must</span></td>
+            <td>Estructura JSON con matriz semanal y persistencia en LocalStorage.</td>
+          </tr>
+          <tr>
+            <td><strong>BL-02</strong></td>
+            <td>Desarrollo del motor de consulta pública por documento de identidad.</td>
+            <td><span class="b-must">Must</span></td>
+            <td>Recuperación inmediata de asignación en menos de 250 ms.</td>
+          </tr>
+          <tr>
+            <td><strong>BL-03</strong></td>
+            <td>Renderizado dinámico de la cuadrícula mensual y 4 estados de turno.</td>
+            <td><span class="b-must">Must</span></td>
+            <td>Visualización de turnos AM, PM, Estudio y Descanso en 7 columnas.</td>
+          </tr>
+          <tr>
+            <td><strong>BL-04</strong></td>
+            <td>Módulo de autenticación por PIN para personal administrativo.</td>
+            <td><span class="b-must">Must</span></td>
+            <td>Validación de código de 4 dígitos con feedback háptico/toast.</td>
+          </tr>
+          <tr>
+            <td><strong>BL-05</strong></td>
+            <td>Maquetación del Dashboard y consolidado de métricas operativas.</td>
+            <td><span class="b-must">Must</span></td>
+            <td>Conteo en tiempo real de turnos AM, PM y personal en estudio.</td>
+          </tr>
+          <tr>
+            <td><strong>BL-06</strong></td>
+            <td>Búsqueda predictiva y filtros de caddies por categoría y sede.</td>
+            <td><span class="b-must">Must</span></td>
+            <td>Filtrado instantáneo en la lista mientras el usuario digita.</td>
+          </tr>
+          <tr>
+            <td><strong>BL-07</strong></td>
+            <td>Editor de matriz semanal de turnos y aplicación de plantillas (presets).</td>
+            <td><span class="b-should">Should</span></td>
+            <td>Asignación de turnos en bloque (Todos AM/PM/Alternar) en un clic.</td>
+          </tr>
+          <tr>
+            <td><strong>BL-08</strong></td>
+            <td>Modal para registro de nuevos caddies y actualización de sedes.</td>
+            <td><span class="b-should">Should</span></td>
+            <td>Adición exitosa de auxiliar con validación de duplicados.</td>
+          </tr>
+          <tr>
+            <td><strong>BL-09</strong></td>
+            <td>Sistema de auditoría con registro cronológico de eventos (logs).</td>
+            <td><span class="b-should">Should</span></td>
+            <td>Estampa de tiempo y detalle de modificaciones visibles en panel.</td>
+          </tr>
+          <tr>
+            <td><strong>BL-10</strong></td>
+            <td>Pruebas de compatibilidad móvil y alternancia de modo oscuro.</td>
+            <td><span class="b-must">Must</span></td>
+            <td>Operación sin fallas en navegadores móviles Android e iOS.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="page-footer">
+      <span>Proyecto CaddiePro - Entrega 1</span>
+      <span>Página 7</span>
+    </div>
+  </div>
+
+  <!-- ============================================================== -->
+  <!-- HOJA 8: SECCIÓN 9 (REFERENCIAS BIBLIOGRÁFICAS APA 7)           -->
+  <!-- ============================================================== -->
+  <div class="page-sheet">
+    <div class="page-body">
+      <h1 class="sec-title">9. Referencias Bibliográficas</h1>
+      <p style="margin-bottom: 16px; color: #64748b; font-size: 9.5pt;">
+        Fuentes técnicas y metodológicas consultadas bajo estándares internacionales de ingeniería de software y normas APA 7:
+      </p>
+
+      <div class="ref-entry">
+        Android Developers. (2024). <em>Guide to app architecture: Mobile architecture and data layer</em>. Google Developers Documentation. https://developer.android.com/topic/architecture
+      </div>
+
+      <div class="ref-entry">
+        Apple Inc. (2024). <em>Human Interface Guidelines: Layout, typography, and touch interactions</em>. Apple Developer Documentation. https://developer.apple.com/design/human-interface-guidelines/
+      </div>
+
+      <div class="ref-entry">
+        Mozilla Developer Network [MDN]. (2024). <em>Progressive Web Apps (PWAs): Core features, manifests, and local storage</em>. MDN Web Docs. https://developer.mozilla.org/en-US/docs/Web/Progressive_web_apps
+      </div>
+
+      <div class="ref-entry">
+        OWASP Foundation. (2023). <em>Mobile Application Security Verification Standard (MASVS) v2.0</em>. Open Worldwide Application Security Project. https://owasp.org/www-project-mobile-app-security/
+      </div>
+
+      <div class="ref-entry">
+        Pressman, R. S., &amp; Maxim, B. R. (2021). <em>Ingeniería del software: un enfoque práctico</em> (9.ª ed.). McGraw-Hill Interamericana.
+      </div>
+
+      <div class="ref-entry">
+        Sommerville, I. (2019). <em>Ingeniería del software</em> (10.ª ed.). Pearson Educación.
+      </div>
+
+      <div class="ref-entry">
+        World Wide Web Consortium [W3C]. (2023). <em>Web Content Accessibility Guidelines (WCAG) 2.1</em>. W3C Recommendation. https://www.w3.org/TR/WCAG21/
+      </div>
+    </div>
+
+    <div class="page-footer">
+      <span>Proyecto CaddiePro - Entrega 1</span>
+      <span>Página 8</span>
+    </div>
+  </div>
+
+</body>
+</html>

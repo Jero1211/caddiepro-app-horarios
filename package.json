@@ -1,0 +1,15 @@
+{
+  "name": "caddiepro-app-horarios",
+  "version": "1.0.0",
+  "description": "CaddiePro - Sistema de Horarios y Gestión de Becarios Fundación Club Campestre",
+  "main": "backend/server.js",
+  "scripts": {
+    "start": "npm start --prefix backend",
+    "dev": "npm run dev --prefix backend",
+    "test": "node backend/test_api.js",
+    "seed": "npm run seed --prefix backend"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}

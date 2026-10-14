@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Guion de Sustentación - Seguimiento 2 (CaddiePro)</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
+    @page {
+      size: letter;
+      margin: 1.5cm 1.8cm 1.5cm 1.8cm;
+    }
+
+    * {
+      box-sizing: border-box;
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+
+    body {
+      font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      font-size: 10pt;
+      line-height: 1.45;
+      color: #1e293b;
+      background-color: #ffffff;
+      margin: 0;
+      padding: 0;
+    }
+
+    .header-banner {
+      border-bottom: 3px solid #059669;
+      padding-bottom: 12px;
+      margin-bottom: 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+    }
+
+    .title-area h1 {
+      font-size: 16pt;
+      font-weight: 800;
+      color: #064e3b;
+      margin: 0 0 4px 0;
+      letter-spacing: -0.5px;
+    }
+
+    .title-area h2 {
+      font-size: 11pt;
+      font-weight: 600;
+      color: #0f766e;
+      margin: 0 0 2px 0;
+    }
+
+    .meta-badge {
+      text-align: right;
+      font-size: 8.5pt;
+      color: #64748b;
+    }
+
+    .badge-pill {
+      background-color: #d1fae5;
+      color: #065f46;
+      padding: 3px 10px;
+      border-radius: 9999px;
+      font-weight: 700;
+      font-size: 8pt;
+      display: inline-block;
+      margin-bottom: 4px;
+      border: 1px solid #a7f3d0;
+    }
+
+    .intro-box {
+      background-color: #f8fafc;
+      border-left: 4px solid #0284c7;
+      padding: 8px 12px;
+      border-radius: 4px;
+      font-size: 8.8pt;
+      color: #334155;
+      margin-bottom: 14px;
+    }
+
+    .phase-card {
+      margin-bottom: 12px;
+      border: 1px solid #e2e8f0;
+      border-radius: 6px;
+      overflow: hidden;
+      page-break-inside: avoid;
+    }
+
+    .phase-header {
+      background-color: #f1f5f9;
+      padding: 6px 12px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid #e2e8f0;
+    }
+
+    .phase-title {
+      font-weight: 700;
+      font-size: 9.5pt;
+      color: #0f172a;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .phase-time {
+      font-size: 8pt;
+      font-weight: 600;
+      color: #64748b;
+      background: #ffffff;
+      padding: 2px 8px;
+      border-radius: 4px;
+      border: 1px solid #cbd5e1;
+    }
+
+    table.script-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 8.8pt;
+    }
+
+    table.script-table th {
+      background-color: #f8fafc;
+      padding: 6px 10px;
+      font-weight: 600;
+      text-align: left;
+      font-size: 8.5pt;
+      color: #475569;
+      border-bottom: 1px solid #cbd5e1;
+    }
+
+    table.script-table td {
+      padding: 8px 10px;
+      vertical-align: top;
+      border-bottom: 1px solid #f1f5f9;
+    }
+
+    .col-speaker {
+      width: 58%;
+      background-color: #ffffff;
+      color: #1e293b;
+      line-height: 1.4;
+    }
+
+    .col-action {
+      width: 42%;
+      background-color: #fafafa;
+      color: #0369a1;
+      font-weight: 500;
+      border-left: 1px solid #e2e8f0;
+      line-height: 1.35;
+    }
+
+    .speech-quote {
+      position: relative;
+      padding-left: 8px;
+      border-left: 2.5px solid #10b981;
+    }
+
+    .speech-quote strong {
+      color: #065f46;
+    }
+
+    .action-tag {
+      display: inline-block;
+      background-color: #e0f2fe;
+      color: #0369a1;
+      padding: 1px 6px;
+      border-radius: 4px;
+      font-size: 7.5pt;
+      font-weight: 700;
+      margin-bottom: 3px;
+      border: 1px solid #bae6fd;
+    }
+
+    .tips-box {
+      margin-top: 14px;
+      background-color: #fefce8;
+      border: 1px solid #fef08a;
+      border-radius: 6px;
+      padding: 8px 12px;
+      font-size: 8.5pt;
+      color: #854d0e;
+      page-break-inside: avoid;
+    }
+
+    .tips-box h3 {
+      margin: 0 0 4px 0;
+      font-size: 9pt;
+      font-weight: 700;
+      color: #713f12;
+    }
+
+    .tips-box ul {
+      margin: 0;
+      padding-left: 18px;
+    }
+
+    .tips-box li {
+      margin-bottom: 2px;
+    }
+
+    .footer-note {
+      text-align: center;
+      font-size: 8pt;
+      color: #94a3b8;
+      margin-top: 14px;
+      border-top: 1px solid #e2e8f0;
+      padding-top: 6px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="header-banner">
+    <div class="title-area">
+      <h1>CaddiePro — Guion de Sustentación</h1>
+      <h2>Seguimiento 2: Backend, MongoDB y Pruebas en Postman (10%)</h2>
+    </div>
+    <div class="meta-badge">
+      <div class="badge-pill">MODALIDAD PAREJAS</div><br>
+      Fundación Club Campestre de Medellín y Llanogrande
+    </div>
+  </div>
+
+  <div class="intro-box">
+    <strong>Instrucciones de coordinación:</strong> Tu compañero hablará con voz clara siguiendo la columna izquierda (<strong>🗣️ Lo que dice</strong>), mientras tú compartes pantalla y ejecutas las acciones exactas de la columna derecha (<strong>🖥️ Lo que muestras</strong>).
+  </div>
+
+  <!-- FASE 1 -->
+  <div class="phase-card">
+    <div class="phase-header">
+      <span class="phase-title">1. Introducción y Arquitectura Tecnológica</span>
+      <span class="phase-time">⏱️ 30 seg</span>
+    </div>
+    <table class="script-table">
+      <thead>
+        <tr>
+          <th>🗣️ Tu compañero (Voz)</th>
+          <th>🖥️ Tú en Pantalla (Acción)</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="col-speaker">
+            <div class="speech-quote">
+              "Buenos días profesor. Para este Seguimiento 2 desarrollamos el <strong>backend completo de la aplicación CaddiePro</strong> para la Fundación Club Campestre.<br><br>
+              Implementamos una <strong>API REST en Node.js con Express</strong> conectada a una base de datos NoSQL en <strong>MongoDB</strong>. Además, creamos un servicio de importación que leyó el archivo Excel institucional y pobló automáticamente la base de datos con los <strong>72 caddies becarios reales</strong>."
+            </div>
+          </td>
+          <td class="col-action">
+            <span class="action-tag">TERMINAL / CONSOLA</span><br>
+            Muestra la terminal con el comando <code>npm start</code> activo donde se lee:<br>
+            • <code>[MongoDB] Conectado exitosamente</code><br>
+            • <code>[Auto-Seed] ¡Éxito! 72 caddies</code><br>
+            • <code>🚀 Servidor corriendo en :5000</code>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- FASE 2 -->
+  <div class="phase-card">
+    <div class="phase-header">
+      <span class="phase-title">2. Diagnóstico y Conexión en Vivo (Health Check)</span>
+      <span class="phase-time">⏱️ 30 seg</span>
+    </div>
+    <table class="script-table">
+      <thead>
+        <tr>
+          <th>🗣️ Tu compañero (Voz)</th>
+          <th>🖥️ Tú en Pantalla (Acción)</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="col-speaker">
+            <div class="speech-quote">
+              "En Postman estructuramos la colección completa de pruebas. Primero validamos el estado del servicio y la conexión en vivo a la base de datos con el endpoint de <strong>Health Check</strong>.<br><br>
+              Adicionalmente, creamos un endpoint de <strong>estadísticas y métricas</strong> que totaliza los caddies por deporte (Golf, Tenis, Híbrido) y por sede (Medellín y Llanogrande)."
+            </div>
+          </td>
+          <td class="col-action">
+            <span class="action-tag">POSTMAN</span><br>
+            1. Abre carpeta <strong>0. Diagnóstico</strong>.<br>
+            2. Selecciona <strong>01. Health Check</strong> y clic en <strong>Send</strong>. Señala el código <code>200 OK</code>.<br>
+            3. Selecciona <strong>02. Resumen & Estadísticas</strong> y clic en <strong>Send</strong>. Muestra el conteo en el JSON.
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- FASE 3 -->
+  <div class="phase-card">
+    <div class="phase-header">
+      <span class="phase-title">3. Consultas y Filtros Dinámicos (GET)</span>
+      <span class="phase-time">⏱️ 40 seg</span>
+    </div>
+    <table class="script-table">
+      <thead>
+        <tr>
+          <th>🗣️ Tu compañero (Voz)</th>
+          <th>🖥️ Tú en Pantalla (Acción)</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="col-speaker">
+            <div class="speech-quote">
+              "Para las consultas implementamos el método <code>GET /api/caddies</code> que recupera los registros con cédula, categoría y disponibilidad semanal.<br><br>
+              Nuestra API soporta <strong>filtros mediante Query Parameters</strong> para consultar eficientemente por deporte o por sede sin traer datos innecesarios."
+            </div>
+          </td>
+          <td class="col-action">
+            <span class="action-tag">POSTMAN</span><br>
+            1. Abre <strong>1. Consultas (GET)</strong> y selecciona <strong>01. Listar Todos</strong>. Dale a <strong>Send</strong>.<br>
+            2. Clic en <strong>02. Filtrar por Deporte (Golf)</strong> y dale a <strong>Send</strong>. Muestra que filtra 7 caddies.
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- FASE 4 -->
+  <div class="phase-card">
+    <div class="phase-header">
+      <span class="phase-title">4. Creación y Persistencia en MongoDB (POST)</span>
+      <span class="phase-time">⏱️ 30 seg</span>
+    </div>
+    <table class="script-table">
+      <thead>
+        <tr>
+          <th>🗣️ Tu compañero (Voz)</th>
+          <th>🖥️ Tú en Pantalla (Acción)</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="col-speaker">
+            <div class="speech-quote">
+              "Para registrar nuevos caddies usamos <code>POST /api/caddies</code> con validación de documento único. Enviamos en el Body el JSON con los datos personales y disponibilidad, persistiendo el documento en MongoDB con su ID generado."
+            </div>
+          </td>
+          <td class="col-action">
+            <span class="action-tag">POSTMAN</span><br>
+            1. Abre <strong>2. Crear Caddie (POST)</strong>.<br>
+            2. Clic en <strong>01. Crear Nuevo Caddie</strong>.<br>
+            3. Muestra la pestaña <strong>Body</strong> y presiona <strong>Send</strong>. Señala la respuesta <code>201 Created</code>.
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- FASE 5 -->
+  <div class="phase-card">
+    <div class="phase-header">
+      <span class="phase-title">5. Actualización de Horarios y Estudios (PUT)</span>
+      <span class="phase-time">⏱️ 30 seg</span>
+    </div>
+    <table class="script-table">
+      <thead>
+        <tr>
+          <th>🗣️ Tu compañero (Voz)</th>
+          <th>🖥️ Tú en Pantalla (Acción)</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="col-speaker">
+            <div class="speech-quote">
+              "Un requerimiento clave es gestionar los días de estudio universitario. Con el endpoint <code>PUT /api/caddies/:cedula/availability</code> actualizamos en tiempo real qué días asiste a la universidad y cuáles turnos tiene disponibles en el club."
+            </div>
+          </td>
+          <td class="col-action">
+            <span class="action-tag">POSTMAN</span><br>
+            1. Abre <strong>3. Actualizar Caddie (PUT)</strong>.<br>
+            2. Clic en <strong>02. Actualizar Disponibilidad y Estudio</strong> y dale a <strong>Send</strong>.<br>
+            3. Muestra en el JSON que el día cambió a <code>"Estudia"</code>.
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- FASE 6 -->
+  <div class="phase-card">
+    <div class="phase-header">
+      <span class="phase-title">6. Auditoría (Logs) y Cierre</span>
+      <span class="phase-time">⏱️ 25 seg</span>
+    </div>
+    <table class="script-table">
+      <thead>
+        <tr>
+          <th>🗣️ Tu compañero (Voz)</th>
+          <th>🖥️ Tú en Pantalla (Acción)</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="col-speaker">
+            <div class="speech-quote">
+              "Por último, implementamos una colección de <strong>Logs de Auditoría</strong>. Cada acción queda grabada con fecha y hora para control de la fundación.<br><br>
+              Con esto el backend queda 100% operativo y listo para enlazar con el frontend en la siguiente entrega. Muchas gracias."
+            </div>
+          </td>
+          <td class="col-action">
+            <span class="action-tag">POSTMAN</span><br>
+            1. Abre <strong>5. Logs y Auditoría</strong>.<br>
+            2. Clic en <strong>01. Obtener Historial</strong> y dale a <strong>Send</strong>. Muestra la lista con los últimos cambios registrados.
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="tips-box">
+    <h3>💡 Tips de Oro para la Sustentación:</h3>
+    <ul>
+      <li><strong>Si el profesor pide buscar una cédula específica:</strong> Ve a <em>1. Consultas &gt; 05. Obtener Caddie por Cédula</em>, pon por ejemplo <code>1011512703</code> en la URL y dale a <code>Send</code>.</li>
+      <li><strong>Si el profesor pregunta por la base de datos:</strong> Explica que la base de datos se llama <code>caddiepro_db</code> en MongoDB local (puerto 27017) con las colecciones <code>caddies</code> y <code>activitylogs</code>.</li>
+    </ul>
+  </div>
+
+  <div class="footer-note">
+    CaddiePro © 2026 — Proyecto de Desarrollo Web — Universidad / Fundación Club Campestre
+  </div>
+
+</body>
+</html>

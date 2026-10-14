@@ -1,0 +1,222 @@
+/* Custom Styles & Stitch Theme Overrides for CaddiePro */
+
+:root {
+  --color-primary: #082F22;
+  --color-primary-container: #24523B;
+  --color-primary-light: #3A674F;
+  --color-accent-leaf: #3FB65E;
+  --color-accent-mint: #85FB9A;
+  --color-bg: #F9FAF5;
+  --color-surface: #FFFFFF;
+  --color-surface-low: #F3F4EF;
+  --color-surface-high: #E7E9E4;
+  --color-surface-highest: #E2E3DE;
+  --color-text-main: #1A1C19;
+  --color-text-muted: #57605A;
+  --color-outline: #C0C9C1;
+  --shadow-card: 0px 4px 20px rgba(8, 47, 34, 0.06);
+  --shadow-elevated: 0px 10px 30px rgba(8, 47, 34, 0.12);
+}
+
+html.dark {
+  --color-primary: #85FB9A;
+  --color-primary-container: #1D3B2E;
+  --color-primary-light: #2D5844;
+  --color-accent-leaf: #4ADE80;
+  --color-accent-mint: #85FB9A;
+  --color-bg: #0A120E;
+  --color-surface: #121F19;
+  --color-surface-low: #0B1611;
+  --color-surface-high: #1C2D25;
+  --color-surface-highest: #283F34;
+  --color-text-main: #F4F7F6;
+  --color-text-muted: #9BB0A5;
+  --color-outline: #415A4D;
+  --shadow-card: 0px 4px 25px rgba(0, 0, 0, 0.5);
+  --shadow-elevated: 0px 10px 35px rgba(0, 0, 0, 0.7);
+}
+
+body {
+  font-family: 'Manrope', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background-color: var(--color-bg);
+  color: var(--color-text-main);
+  -webkit-tap-highlight-color: transparent;
+  transition: background-color 0.25s ease, color 0.25s ease;
+}
+
+/* Material symbols fine-tuning */
+.material-symbols-outlined {
+  font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+  display: inline-block;
+  vertical-align: middle;
+  user-select: none;
+}
+
+.material-symbols-outlined.filled {
+  font-variation-settings: 'FILL' 1, 'wght' 500, 'GRAD' 0, 'opsz' 24;
+}
+
+/* Custom transitions and animations */
+.fade-in {
+  animation: fadeIn 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.slide-up {
+  animation: slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Custom Scrollbars */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(8, 47, 34, 0.2);
+  border-radius: 999px;
+}
+html.dark ::-webkit-scrollbar-thumb {
+  background: rgba(133, 251, 154, 0.25);
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(8, 47, 34, 0.4);
+}
+html.dark ::-webkit-scrollbar-thumb:hover {
+  background: rgba(133, 251, 154, 0.45);
+}
+
+/* Input Focus Ring Styles */
+input:focus, select:focus, textarea:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(63, 182, 94, 0.3);
+}
+
+/* Theme toggle button micro-animation */
+#theme-toggle-btn span {
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+#theme-toggle-btn:hover span {
+  transform: rotate(15deg) scale(1.1);
+}
+
+/* Pulsing active badge */
+.pulse-badge {
+  position: relative;
+}
+.pulse-badge::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: inherit;
+  box-shadow: 0 0 0 0 rgba(63, 182, 94, 0.6);
+  animation: pulseEffect 2s infinite;
+}
+
+@keyframes pulseEffect {
+  0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(63, 182, 94, 0.6); }
+  70% { transform: scale(1.05); box-shadow: 0 0 0 8px rgba(63, 182, 94, 0); }
+  100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(63, 182, 94, 0); }
+}
+
+/* Toast styling */
+#toast-container {
+  position: fixed;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  pointer-events: none;
+}
+
+.toast {
+  pointer-events: auto;
+  min-width: 280px;
+  max-width: 90vw;
+  background: #082F22;
+  color: #FFFFFF;
+  padding: 12px 18px;
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 14px;
+  font-weight: 500;
+  animation: toastIn 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  border: 1px solid rgba(133, 251, 154, 0.2);
+}
+
+html.dark .toast {
+  background: #182C23;
+  color: #F4F7F6;
+  border: 1px solid rgba(133, 251, 154, 0.35);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+}
+
+@keyframes toastIn {
+  from { transform: translateY(20px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+/* Shift Badges and Indicators */
+.badge-shift-am {
+  background-color: #ECFDF5;
+  color: #065F46;
+  border: 1px solid #A7F3D0;
+}
+html.dark .badge-shift-am {
+  background-color: rgba(6, 78, 59, 0.5);
+  color: #6EE7B7;
+  border-color: rgba(52, 211, 153, 0.3);
+}
+
+.badge-shift-pm {
+  background-color: #EFF6FF;
+  color: #1E40AF;
+  border: 1px solid #BFDBFE;
+}
+html.dark .badge-shift-pm {
+  background-color: rgba(30, 58, 138, 0.5);
+  color: #93C5FD;
+  border-color: rgba(96, 165, 250, 0.3);
+}
+
+.badge-shift-study {
+  background-color: #FFFBEB;
+  color: #92400E;
+  border: 1px solid #FDE68A;
+}
+html.dark .badge-shift-study {
+  background-color: rgba(120, 53, 15, 0.5);
+  color: #FCD34D;
+  border-color: rgba(245, 158, 11, 0.3);
+}
+
+.badge-shift-rest {
+  background-color: #F3F4F6;
+  color: #4B5563;
+  border: 1px solid #E5E7EB;
+}
+html.dark .badge-shift-rest {
+  background-color: #1C2D25;
+  color: #9CA3AF;
+  border-color: #2D4439;
+}

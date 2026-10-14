@@ -1,0 +1,641 @@
+<!DOCTYPE html>
+<html lang="es" class="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CaddiePro - Fundación Club Campestre de Medellín y Llanogrande</title>
+  
+  <!-- Prevent dark mode flash -->
+  <script>
+    (function() {
+      const savedTheme = localStorage.getItem('caddiepro_theme');
+      if (savedTheme === 'dark' || (!savedTheme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+        document.documentElement.classList.add('dark');
+        document.documentElement.classList.remove('light');
+      } else {
+        document.documentElement.classList.add('light');
+        document.documentElement.classList.remove('dark');
+      }
+    })();
+  </script>
+
+  <!-- Tailwind CSS CDN with forms plugin -->
+  <script src="https://cdn.tailwindcss.com?plugins=forms"></script>
+  
+  <!-- Google Fonts: Manrope -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <!-- Material Symbols Outlined -->
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
+  
+  <!-- Tailwind Configuration matching Stitch tokens -->
+  <script>
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "primary": "#082F22",
+            "primary-container": "#24523B",
+            "primary-light": "#3A674F",
+            "primary-fixed": "#BCEECF",
+            "accent-leaf": "#3FB65E",
+            "accent-mint": "#85FB9A",
+            "foundation-green": "#24523B",
+            "background": "#F9FAF5",
+            "surface": "#FFFFFF",
+            "surface-low": "#F3F4EF",
+            "surface-high": "#E7E9E4",
+            "surface-highest": "#E2E3DE",
+            "outline": "#717973",
+            "outline-variant": "#C0C9C1",
+            "text-main": "#1A1C19",
+            "text-muted": "#57605A"
+          },
+          fontFamily: {
+            sans: ["Manrope", "sans-serif"]
+          },
+          boxShadow: {
+            "card": "0px 4px 20px rgba(8, 47, 34, 0.06)",
+            "elevated": "0px 10px 30px rgba(8, 47, 34, 0.12)",
+            "glow": "0px 0px 20px rgba(63, 182, 94, 0.3)"
+          }
+        }
+      }
+    }
+  </script>
+  
+  <!-- Custom stylesheet -->
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body class="bg-background dark:bg-[#0A120E] text-text-main dark:text-[#F4F7F6] min-h-screen flex flex-col font-sans selection:bg-primary-fixed selection:text-primary transition-colors duration-200">
+
+  <!-- ========================================== -->
+  <!-- TOP APP HEADER BAR -->
+  <!-- ========================================== -->
+  <header id="app-header" class="fixed top-0 left-0 right-0 z-40 bg-white/90 dark:bg-[#121F19]/90 backdrop-blur-md border-b border-surface-high dark:border-[#1C2D25] h-16 px-4 md:px-8 flex items-center justify-between transition-all">
+    <div class="flex items-center gap-3">
+      <button id="header-back-btn" class="hidden p-2 text-primary dark:text-accent-mint hover:bg-surface-low dark:hover:bg-[#1C2D25] rounded-lg transition-colors" title="Volver">
+        <span class="material-symbols-outlined text-2xl">arrow_back</span>
+      </button>
+      <div class="flex items-center gap-2.5 cursor-pointer" onclick="App.navigate('view-consultar')">
+        <div class="w-9 h-9 rounded-xl bg-primary dark:bg-[#1D3B2E] flex items-center justify-center text-accent-mint shadow-sm border border-transparent dark:border-accent-mint/30">
+          <span class="material-symbols-outlined filled text-xl">sports_golf</span>
+        </div>
+        <div>
+          <span class="font-extrabold text-xl tracking-tight text-primary dark:text-white">Caddie<span class="text-accent-leaf">Pro</span></span>
+          <span class="hidden lg:inline-block ml-2 text-xs font-semibold px-2.5 py-0.5 rounded-full bg-emerald-50 dark:bg-emerald-950/60 text-emerald-800 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800">Fundación Club Campestre de Medellín y Llanogrande</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right Header Actions -->
+    <div class="flex items-center gap-2 sm:gap-3">
+      
+      <!-- Dark Mode Switch Button -->
+      <button 
+        id="theme-toggle-btn" 
+        onclick="App.toggleTheme()" 
+        class="h-9 px-2.5 sm:px-3 rounded-xl text-primary dark:text-accent-mint hover:bg-surface-low dark:hover:bg-[#1C2D25] transition-all flex items-center gap-1.5 border border-surface-high dark:border-[#1C2D25]" 
+        title="Cambiar modo claro / oscuro"
+      >
+        <span id="theme-icon" class="material-symbols-outlined text-lg">dark_mode</span>
+        <span id="theme-label" class="hidden sm:inline text-xs font-bold">Modo Oscuro</span>
+      </button>
+
+      <!-- Active View Badge -->
+      <span id="current-view-badge" class="hidden md:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium bg-surface-low dark:bg-[#0B1611] text-text-muted dark:text-[#9BB0A5] border border-surface-high dark:border-[#1C2D25]">
+        <span class="w-2 h-2 rounded-full bg-accent-leaf"></span>
+        <span id="current-view-text">Consulta Pública</span>
+      </span>
+
+      <!-- Admin / User Button Container -->
+      <div id="header-user-action">
+        <button onclick="App.navigate('view-login')" class="flex items-center gap-1.5 text-xs font-bold text-primary dark:text-accent-mint hover:bg-surface-low dark:hover:bg-[#1C2D25] px-3 py-2 rounded-xl transition-colors border border-surface-high dark:border-[#1C2D25]">
+          <span class="material-symbols-outlined text-base text-accent-leaf">lock</span>
+          <span class="hidden sm:inline">Acceso Admin</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- ========================================== -->
+  <!-- MAIN APP CONTAINER / ROUTER CANVAS -->
+  <!-- ========================================== -->
+  <main class="flex-grow pt-20 pb-16 px-4 sm:px-6 md:px-8 max-w-6xl mx-auto w-full flex flex-col justify-start">
+
+    <!-- ========================================== -->
+    <!-- VIEW 1: CONSULTA DE HORARIO (PÚBLICA) -->
+    <!-- ========================================== -->
+    <section id="view-consultar" class="app-view fade-in flex-grow flex flex-col justify-center items-center py-6 w-full max-w-lg mx-auto">
+      <div class="w-full bg-surface dark:bg-[#121F19] rounded-2xl shadow-card dark:shadow-[0_4px_25px_rgba(0,0,0,0.5)] p-6 sm:p-8 border border-surface-high dark:border-[#1C2D25] transition-colors">
+        
+        <!-- Header / Logo icon -->
+        <div class="text-center mb-6">
+          <div class="w-16 h-16 mx-auto mb-4 rounded-2xl bg-gradient-to-br from-primary to-primary-container dark:from-[#1D3B2E] dark:to-[#0B1611] flex items-center justify-center text-accent-mint shadow-md border border-transparent dark:border-accent-mint/20">
+            <span class="material-symbols-outlined text-3xl filled">badge</span>
+          </div>
+          <h1 class="text-2xl sm:text-3xl font-extrabold text-primary dark:text-white tracking-tight mb-2">Consulta de Horario</h1>
+          <p class="text-sm sm:text-base text-text-muted dark:text-[#9BB0A5]">Ingrese su número de documento o cédula para consultar sus turnos AM y PM</p>
+        </div>
+
+        <!-- Search Form -->
+        <form id="form-consulta" class="flex flex-col gap-5" onsubmit="App.handleLookup(event)">
+          <div class="flex flex-col">
+            <label for="input-documento" class="text-xs font-bold uppercase tracking-wider text-text-muted dark:text-[#9BB0A5] mb-2">Número de Documento</label>
+            <div class="relative flex items-center">
+              <span class="material-symbols-outlined absolute left-4 text-outline dark:text-[#415A4D] text-2xl pointer-events-none">pin</span>
+              <input 
+                id="input-documento" 
+                type="tel" 
+                inputmode="numeric" 
+                pattern="[0-9]*" 
+                autocomplete="off" 
+                placeholder="Ej. 10203040" 
+                class="w-full h-16 pl-14 pr-4 rounded-xl bg-surface-low dark:bg-[#0B1611] border border-surface-high dark:border-[#1C2D25] focus:border-primary dark:focus:border-accent-leaf focus:bg-white dark:focus:bg-[#0E1B15] text-2xl font-bold text-center text-primary dark:text-accent-mint tracking-widest transition-all"
+                required
+              />
+            </div>
+          </div>
+
+          <!-- Primary Submit Button -->
+          <button type="submit" class="w-full h-14 bg-primary hover:bg-primary-container dark:bg-accent-leaf dark:hover:bg-emerald-500 text-white dark:text-[#0A120E] font-bold text-base rounded-xl flex items-center justify-center gap-2 shadow-sm hover:shadow-md transition-all active:scale-[0.98]">
+            <span class="material-symbols-outlined filled text-xl">search</span>
+            <span>Consultar Horario</span>
+          </button>
+        </form>
+
+        <!-- Quick Demo Profiles for instant testing -->
+        <div class="mt-8 pt-6 border-t border-surface-high dark:border-[#1C2D25]">
+          <div class="flex items-center justify-between mb-3">
+            <span class="text-xs font-semibold text-text-muted dark:text-[#9BB0A5] uppercase tracking-wider">Perfiles de Prueba Rápidos:</span>
+            <span class="text-xs text-accent-leaf font-medium">Click para probar</span>
+          </div>
+          <div class="grid grid-cols-2 sm:grid-cols-3 gap-2" id="demo-chips-container">
+            <!-- Dynamically populated chips -->
+          </div>
+        </div>
+      </div>
+
+      <!-- Foundation Info Footer Card -->
+      <div class="mt-6 text-center text-xs text-text-muted dark:text-[#9BB0A5] flex items-center justify-center gap-2 px-4">
+        <span class="material-symbols-outlined text-sm text-accent-leaf">verified</span>
+        <span>Sistema Oficial de Turnos AM/PM • Fundación Club Campestre de Medellín y Llanogrande</span>
+      </div>
+    </section>
+
+    <!-- ========================================== -->
+    <!-- VIEW 2: RESULTADO DE HORARIO Y CALENDARIO -->
+    <!-- ========================================== -->
+    <section id="view-resultado" class="app-view hidden fade-in w-full max-w-2xl mx-auto py-4">
+      
+      <!-- Back Navigation Header -->
+      <div class="flex items-center justify-between mb-4">
+        <button onclick="App.navigate('view-consultar')" class="flex items-center gap-1.5 text-sm font-bold text-primary dark:text-accent-mint hover:bg-surface-low dark:hover:bg-[#121F19] px-3.5 py-2 rounded-xl transition-colors border border-surface-high dark:border-[#1C2D25]">
+          <span class="material-symbols-outlined text-lg">arrow_back</span>
+          <span>Volver a Consulta</span>
+        </button>
+        <span class="text-xs font-bold px-3 py-1 rounded-full bg-emerald-50 dark:bg-emerald-950/70 text-emerald-800 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800">
+          Horario Oficial Fundación
+        </span>
+      </div>
+
+      <!-- Caddie Card Container -->
+      <div class="bg-surface dark:bg-[#121F19] rounded-2xl shadow-card dark:shadow-[0_4px_25px_rgba(0,0,0,0.5)] border border-surface-high dark:border-[#1C2D25] overflow-hidden">
+        
+        <!-- Header Banner & Profile Summary -->
+        <div class="bg-gradient-to-r from-primary to-primary-container dark:from-[#1D3B2E] dark:to-[#0B1611] p-6 text-white relative">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+            <div>
+              <div class="flex items-center gap-3 flex-wrap">
+                <h2 id="res-caddie-name" class="text-2xl sm:text-3xl font-extrabold tracking-tight">Juan Pérez</h2>
+                <span id="res-caddie-category" class="px-3 py-1 rounded-full text-xs font-bold bg-white/20 text-white backdrop-blur-sm border border-white/30">Caddie Categoría 1</span>
+              </div>
+              <p class="text-xs sm:text-sm text-emerald-100/90 dark:text-emerald-200/80 mt-1">
+                Documento: <span id="res-caddie-doc" class="font-mono font-semibold">10203040</span> • Sede: <span id="res-caddie-venue" class="font-semibold">Llanogrande</span>
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Main Body: Calendario de Disponibilidad -->
+        <div class="p-6">
+          
+          <!-- Month Header Selector -->
+          <div class="flex items-center justify-between mb-5 pb-4 border-b border-surface-high dark:border-[#1C2D25]">
+            <h3 id="cal-month-title" class="text-xl font-extrabold text-primary dark:text-white">Septiembre 2026</h3>
+            <div class="flex items-center gap-1">
+              <button onclick="App.changeCalendarMonth(-1)" class="p-2 text-primary dark:text-accent-mint hover:bg-surface-low dark:hover:bg-[#1C2D25] rounded-lg transition-colors" title="Mes Anterior">
+                <span class="material-symbols-outlined">chevron_left</span>
+              </button>
+              <button onclick="App.changeCalendarMonth(1)" class="p-2 text-primary dark:text-accent-mint hover:bg-surface-low dark:hover:bg-[#1C2D25] rounded-lg transition-colors" title="Mes Siguiente">
+                <span class="material-symbols-outlined">chevron_right</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Legend: 4 Daily States -->
+          <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 mb-5 text-xs">
+            <div class="flex items-center gap-1.5 p-2 rounded-lg bg-emerald-50/70 dark:bg-emerald-950/40 border border-emerald-200/60 dark:border-emerald-800/40">
+              <span class="w-3 h-3 rounded-full bg-accent-leaf"></span>
+              <span class="font-bold text-emerald-900 dark:text-emerald-200">☀️ Turno AM (Mañana)</span>
+            </div>
+            <div class="flex items-center gap-1.5 p-2 rounded-lg bg-blue-50/70 dark:bg-blue-950/40 border border-blue-200/60 dark:border-blue-800/40">
+              <span class="w-3 h-3 rounded-full bg-blue-500"></span>
+              <span class="font-bold text-blue-900 dark:text-blue-200">⛅ Turno PM (Tarde)</span>
+            </div>
+            <div class="flex items-center gap-1.5 p-2 rounded-lg bg-amber-50/70 dark:bg-amber-950/40 border border-amber-200/60 dark:border-amber-800/40">
+              <span class="w-3 h-3 rounded-full bg-amber-400"></span>
+              <span class="font-bold text-amber-900 dark:text-amber-200">🎓 Estudia (Fundación)</span>
+            </div>
+            <div class="flex items-center gap-1.5 p-2 rounded-lg bg-surface-low dark:bg-[#0B1611] border border-surface-high dark:border-[#1C2D25]">
+              <span class="w-3 h-3 rounded-full bg-surface-highest dark:bg-[#283F34] border border-outline-variant dark:border-[#415A4D]"></span>
+              <span class="font-semibold text-text-muted dark:text-[#9BB0A5]">☕ Descanso</span>
+            </div>
+          </div>
+
+          <!-- Days of Week Header -->
+          <div class="grid grid-cols-7 gap-1 text-center font-bold text-xs text-text-muted dark:text-[#9BB0A5] uppercase mb-2">
+            <div>Lun</div>
+            <div>Mar</div>
+            <div>Mié</div>
+            <div>Jue</div>
+            <div>Vie</div>
+            <div class="text-primary dark:text-accent-mint">Sáb</div>
+            <div class="text-primary dark:text-accent-mint">Dom</div>
+          </div>
+
+          <!-- Calendar Days Grid -->
+          <div id="cal-days-grid" class="grid grid-cols-7 gap-1.5 mb-6">
+            <!-- Populated by JavaScript -->
+          </div>
+
+          <!-- Selected Day Detail Card -->
+          <div id="cal-day-detail-card" class="bg-surface-low dark:bg-[#0B1611] rounded-2xl p-5 border border-surface-high dark:border-[#1C2D25]">
+            <div class="flex items-center justify-between mb-2">
+              <span id="cal-detail-date" class="text-sm font-extrabold text-primary dark:text-white">Miércoles, 2 de Septiembre</span>
+              <span id="cal-detail-badge" class="px-3 py-1 rounded-full text-xs font-bold bg-emerald-100 dark:bg-emerald-950/80 text-emerald-800 dark:text-emerald-300">☀️ Turno AM (06:00 - 13:30)</span>
+            </div>
+            <p id="cal-detail-desc" class="text-xs text-text-muted dark:text-[#9BB0A5] mt-1 font-medium">Jornada activa programada.</p>
+            <div id="cal-foundation-note" class="mt-3 text-xs text-primary dark:text-emerald-200 font-medium bg-white dark:bg-[#15241E] p-3 rounded-xl border border-surface-high dark:border-[#1C2D25]">
+              🎓 Nota Fundación: Beca deportiva Fundación Club Campestre.
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Card Footer -->
+        <div class="bg-surface-low dark:bg-[#0B1611] px-6 py-4 border-t border-surface-high dark:border-[#1C2D25] flex items-center justify-between text-xs text-text-muted dark:text-[#9BB0A5]">
+          <span>Sistema Oficial de Turnos AM/PM • Fundación Club Campestre</span>
+          <button onclick="App.navigate('view-consultar')" class="text-primary dark:text-accent-mint font-bold hover:underline">Nueva Consulta</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================== -->
+    <!-- VIEW 3: ACCESO ADMIN (LOGIN) -->
+    <!-- ========================================== -->
+    <section id="view-login" class="app-view hidden fade-in flex-grow flex flex-col justify-center items-center py-6 w-full max-w-md mx-auto">
+      <div class="w-full bg-surface dark:bg-[#121F19] rounded-2xl shadow-card dark:shadow-[0_4px_25px_rgba(0,0,0,0.5)] p-6 sm:p-8 border border-surface-high dark:border-[#1C2D25]">
+        
+        <div class="text-center mb-6">
+          <div class="w-14 h-14 mx-auto mb-3 rounded-2xl bg-primary dark:bg-[#1D3B2E] text-accent-mint flex items-center justify-center shadow-md border border-transparent dark:border-accent-mint/30">
+            <span class="material-symbols-outlined text-3xl">admin_panel_settings</span>
+          </div>
+          <h2 class="text-2xl font-extrabold text-primary dark:text-white tracking-tight mb-1">Acceso Administrativo</h2>
+          <p class="text-xs sm:text-sm text-text-muted dark:text-[#9BB0A5]">Panel exclusivo para Club Managers y Coordinadores de Fundación</p>
+        </div>
+
+        <form id="form-login" class="flex flex-col gap-4" onsubmit="App.handleLogin(event)">
+          <div>
+            <label for="admin-pin" class="text-xs font-bold uppercase tracking-wider text-text-muted dark:text-[#9BB0A5] block mb-1.5">Código PIN de Acceso</label>
+            <div class="relative flex items-center">
+              <span class="material-symbols-outlined absolute left-3 text-outline dark:text-[#415A4D] text-xl">key</span>
+              <input 
+                id="admin-pin" 
+                type="password" 
+                placeholder="••••" 
+                maxlength="8" 
+                class="w-full h-14 pl-11 pr-4 rounded-xl bg-surface-low dark:bg-[#0B1611] border border-surface-high dark:border-[#1C2D25] focus:border-primary dark:focus:border-accent-leaf text-xl font-bold text-center tracking-widest text-primary dark:text-accent-mint"
+                required
+              />
+            </div>
+          </div>
+
+          <button type="submit" class="w-full h-12 bg-primary hover:bg-primary-container dark:bg-accent-leaf dark:hover:bg-emerald-500 text-white dark:text-[#0A120E] font-bold text-sm rounded-xl flex items-center justify-center gap-2 shadow-sm transition-all active:scale-[0.98]">
+            <span>Ingresar al Panel</span>
+            <span class="material-symbols-outlined text-base">arrow_forward</span>
+          </button>
+        </form>
+
+        <!-- Quick Demo login helper -->
+        <div class="mt-6 pt-4 border-t border-surface-high dark:border-[#1C2D25] text-center">
+          <button onclick="App.fillDemoPin()" class="text-xs font-bold text-accent-leaf hover:underline">
+            ⚡ Autocompletar PIN Demo (1234)
+          </button>
+        </div>
+
+        <div class="mt-4 text-center">
+          <button onclick="App.navigate('view-consultar')" class="text-xs font-semibold text-text-muted dark:text-[#9BB0A5] hover:text-primary dark:hover:text-white transition-colors">
+            ← Volver a Consulta Pública
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================== -->
+    <!-- VIEW 4: PANEL DE ADMINISTRACIÓN (DASHBOARD) -->
+    <!-- ========================================== -->
+    <section id="view-admin" class="app-view hidden fade-in w-full">
+      
+      <!-- Admin Header Banner -->
+      <div class="bg-surface dark:bg-[#121F19] rounded-2xl shadow-card dark:shadow-[0_4px_25px_rgba(0,0,0,0.5)] border border-surface-high dark:border-[#1C2D25] p-6 mb-6">
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+          <div class="flex items-center gap-3">
+            <div class="w-12 h-12 rounded-xl bg-primary dark:bg-[#1D3B2E] flex items-center justify-center text-accent-mint shadow-sm border border-transparent dark:border-accent-mint/30">
+              <span class="material-symbols-outlined text-2xl">shield_person</span>
+            </div>
+            <div>
+              <h1 class="text-xl sm:text-2xl font-extrabold text-primary dark:text-white tracking-tight">Panel de Administración</h1>
+              <p class="text-xs sm:text-sm text-text-muted dark:text-[#9BB0A5]">Fundación Club Campestre • Gestión de Horarios y Disponibilidad AM/PM</p>
+            </div>
+          </div>
+
+          <!-- Admin Quick Action Buttons -->
+          <div class="flex items-center gap-2 flex-wrap">
+            <button onclick="App.openNewCaddieModal()" class="px-4 py-2 bg-primary hover:bg-primary-container dark:bg-accent-leaf dark:hover:bg-emerald-500 text-white dark:text-[#0A120E] font-bold text-xs rounded-xl flex items-center gap-1.5 shadow-sm transition-all active:scale-95">
+              <span class="material-symbols-outlined text-base">person_add</span>
+              <span>+ Nuevo Caddie</span>
+            </button>
+            <button onclick="App.logoutAdmin()" class="p-2 text-rose-600 dark:text-rose-400 hover:bg-rose-50 dark:hover:bg-rose-950/40 rounded-xl transition-colors" title="Cerrar Sesión">
+              <span class="material-symbols-outlined">logout</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Dashboard Stats Counters -->
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 mt-6 pt-6 border-t border-surface-high dark:border-[#1C2D25]">
+          <div class="bg-surface-low dark:bg-[#0B1611] p-3.5 rounded-xl border border-surface-high dark:border-[#1C2D25]">
+            <span class="text-xs font-semibold text-text-muted dark:text-[#9BB0A5] block">Total Caddies</span>
+            <span id="stat-total-caddies" class="text-2xl font-extrabold text-primary dark:text-white">8</span>
+          </div>
+          <div class="bg-surface-low dark:bg-[#0B1611] p-3.5 rounded-xl border border-surface-high dark:border-[#1C2D25]">
+            <span class="text-xs font-semibold text-text-muted dark:text-[#9BB0A5] block">Turnos AM Semanales</span>
+            <span id="stat-am-shifts" class="text-2xl font-extrabold text-accent-leaf">24</span>
+          </div>
+          <div class="bg-surface-low dark:bg-[#0B1611] p-3.5 rounded-xl border border-surface-high dark:border-[#1C2D25]">
+            <span class="text-xs font-semibold text-text-muted dark:text-[#9BB0A5] block">Turnos PM Semanales</span>
+            <span id="stat-pm-shifts" class="text-2xl font-extrabold text-blue-600 dark:text-blue-400">18</span>
+          </div>
+          <div class="bg-surface-low dark:bg-[#0B1611] p-3.5 rounded-xl border border-surface-high dark:border-[#1C2D25]">
+            <span class="text-xs font-semibold text-text-muted dark:text-[#9BB0A5] block">En Estudio / Fundación</span>
+            <span id="stat-studying" class="text-2xl font-extrabold text-amber-600 dark:text-amber-400">4</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Navigation Tabs for Admin -->
+      <div class="flex items-center gap-2 border-b border-surface-high dark:border-[#1C2D25] mb-6 overflow-x-auto pb-1">
+        <button id="admin-tab-roster" onclick="App.switchAdminTab('roster')" class="px-4 py-2.5 font-bold text-sm border-b-2 border-primary dark:border-accent-mint text-primary dark:text-accent-mint flex items-center gap-2 transition-all">
+          <span class="material-symbols-outlined text-lg">group</span>
+          <span>Roster y Horarios Diarios</span>
+        </button>
+        <button id="admin-tab-logs" onclick="App.switchAdminTab('logs')" class="px-4 py-2.5 font-semibold text-sm border-b-2 border-transparent text-text-muted dark:text-[#9BB0A5] hover:text-primary dark:hover:text-white flex items-center gap-2 transition-all">
+          <span class="material-symbols-outlined text-lg">history</span>
+          <span>Actividad & Logs</span>
+        </button>
+      </div>
+
+      <!-- ========================================== -->
+      <!-- ADMIN TAB 1: ROSTER DE CADDIES -->
+      <!-- ========================================== -->
+      <div id="admin-content-roster" class="admin-tab-content">
+        <!-- Search and Filters Bar -->
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4">
+          <!-- Search box -->
+          <div class="relative flex-grow max-w-md">
+            <span class="material-symbols-outlined absolute left-3 top-2.5 text-outline dark:text-[#415A4D] text-xl">search</span>
+            <input 
+              id="roster-search-input" 
+              type="text" 
+              placeholder="Buscar por nombre, documento o sede..." 
+              oninput="App.filterRoster()"
+              class="w-full h-10 pl-10 pr-4 rounded-xl bg-surface dark:bg-[#121F19] border border-surface-high dark:border-[#1C2D25] text-sm text-text-main dark:text-white focus:border-primary dark:focus:border-accent-leaf"
+            />
+          </div>
+
+          <!-- Category filter pills -->
+          <div class="flex items-center gap-1.5 overflow-x-auto pb-1" id="roster-filter-pills">
+            <button onclick="App.setCategoryFilter('all')" class="roster-filter-btn px-3 py-1 rounded-full text-xs font-bold bg-primary dark:bg-accent-leaf text-white dark:text-[#0A120E]" data-cat="all">Todos</button>
+            <button onclick="App.setCategoryFilter('Categoría 1')" class="roster-filter-btn px-3 py-1 rounded-full text-xs font-semibold bg-surface dark:bg-[#121F19] border border-surface-high dark:border-[#1C2D25] text-text-muted dark:text-[#9BB0A5] hover:bg-surface-low dark:hover:bg-[#1C2D25]" data-cat="Categoría 1">Cat. 1</button>
+            <button onclick="App.setCategoryFilter('Categoría 2')" class="roster-filter-btn px-3 py-1 rounded-full text-xs font-semibold bg-surface dark:bg-[#121F19] border border-surface-high dark:border-[#1C2D25] text-text-muted dark:text-[#9BB0A5] hover:bg-surface-low dark:hover:bg-[#1C2D25]" data-cat="Categoría 2">Cat. 2</button>
+            <button onclick="App.setCategoryFilter('Categoría 3')" class="roster-filter-btn px-3 py-1 rounded-full text-xs font-semibold bg-surface dark:bg-[#121F19] border border-surface-high dark:border-[#1C2D25] text-text-muted dark:text-[#9BB0A5] hover:bg-surface-low dark:hover:bg-[#1C2D25]" data-cat="Categoría 3">Cat. 3</button>
+            <button onclick="App.setCategoryFilter('Tenis')" class="roster-filter-btn px-3 py-1 rounded-full text-xs font-semibold bg-surface dark:bg-[#121F19] border border-surface-high dark:border-[#1C2D25] text-text-muted dark:text-[#9BB0A5] hover:bg-surface-low dark:hover:bg-[#1C2D25]" data-cat="Tenis">Tenis</button>
+          </div>
+        </div>
+
+        <!-- Caddies List Cards Container -->
+        <div id="admin-caddies-container" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <!-- Populated by JavaScript -->
+        </div>
+      </div>
+
+      <!-- ========================================== -->
+      <!-- ADMIN TAB 2: ACTIVIDAD Y LOGS -->
+      <!-- ========================================== -->
+      <div id="admin-content-logs" class="admin-tab-content hidden">
+        <div class="bg-surface dark:bg-[#121F19] rounded-2xl shadow-card dark:shadow-[0_4px_25px_rgba(0,0,0,0.5)] border border-surface-high dark:border-[#1C2D25] p-6">
+          <div class="flex items-center justify-between mb-4">
+            <div>
+              <h3 class="text-lg font-bold text-primary dark:text-white">Registro de Actividad en Tiempo Real</h3>
+              <p class="text-xs text-text-muted dark:text-[#9BB0A5]">Consultas, cambios de turnos AM/PM y rotaciones ejecutadas</p>
+            </div>
+            <button onclick="App.resetDemoData()" class="px-3 py-1.5 text-xs text-text-muted dark:text-[#9BB0A5] hover:text-rose-600 dark:hover:text-rose-400 hover:bg-rose-50 dark:hover:bg-rose-950/40 rounded-lg transition-colors border border-surface-high dark:border-[#1C2D25]">
+              Restablecer Datos Demo
+            </button>
+          </div>
+
+          <div id="admin-logs-container" class="space-y-3">
+            <!-- Populated by JavaScript -->
+          </div>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- ========================================== -->
+    <!-- VIEW 5: GESTIONAR HORARIO INDIVIDUAL (AM / PM DIARIO) -->
+    <!-- ========================================== -->
+    <section id="view-gestionar-horario" class="app-view hidden fade-in w-full max-w-4xl mx-auto py-4">
+      
+      <!-- Back Header -->
+      <div class="flex items-center justify-between mb-4">
+        <button onclick="App.navigate('view-admin')" class="flex items-center gap-1 text-sm font-semibold text-primary dark:text-accent-mint hover:bg-surface-low dark:hover:bg-[#121F19] px-3 py-1.5 rounded-lg transition-colors">
+          <span class="material-symbols-outlined text-lg">arrow_back</span>
+          <span>Volver al Roster</span>
+        </button>
+        <span class="text-xs font-bold text-text-muted dark:text-[#9BB0A5] uppercase tracking-wider">Configuración de Turnos AM / PM</span>
+      </div>
+
+      <div class="bg-surface dark:bg-[#121F19] rounded-2xl shadow-card dark:shadow-[0_4px_25px_rgba(0,0,0,0.5)] border border-surface-high dark:border-[#1C2D25] p-6 sm:p-8">
+        
+        <!-- Caddie Header Info -->
+        <div class="pb-5 border-b border-surface-high dark:border-[#1C2D25] mb-5 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div>
+            <div class="flex items-center gap-3 flex-wrap">
+              <h2 id="edit-caddie-name" class="text-xl sm:text-2xl font-extrabold text-primary dark:text-white">Carlos Ramírez</h2>
+              <span id="edit-caddie-cat" class="px-3 py-1 rounded-full text-xs font-bold bg-primary/10 dark:bg-accent-mint/20 text-primary dark:text-accent-mint border border-primary/20 dark:border-accent-mint/30">Caddie Categoría 2</span>
+            </div>
+            <p class="text-xs text-text-muted dark:text-[#9BB0A5] mt-1">Documento: <span id="edit-caddie-doc" class="font-mono font-semibold">50607080</span> • Sede: <span id="edit-caddie-venue" class="font-semibold">Llanogrande</span></p>
+          </div>
+
+          <!-- Weekly Live Summary Counter -->
+          <div id="edit-summary-stats" class="flex items-center gap-1.5 flex-wrap text-xs font-bold">
+            <!-- Populated dynamically: e.g. 3 AM | 2 PM | 2 Estudia -->
+          </div>
+        </div>
+
+        <!-- Quick Preset Actions Toolbar -->
+        <div class="flex items-center justify-between flex-wrap gap-2 mb-4 bg-surface-low dark:bg-[#0B1611] p-3 rounded-xl border border-surface-high dark:border-[#1C2D25]">
+          <span class="text-xs font-bold text-text-muted dark:text-[#9BB0A5] flex items-center gap-1">
+            <span class="material-symbols-outlined text-accent-leaf text-base">bolt</span>
+            <span>Plantillas Rápidas:</span>
+          </span>
+          <div class="flex items-center gap-1.5 flex-wrap">
+            <button type="button" onclick="App.applySchedulePreset('all-am')" class="px-2.5 py-1 text-xs font-semibold rounded-lg bg-surface dark:bg-[#121F19] hover:bg-emerald-50 dark:hover:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800 transition-colors">
+              ☀️ Todos AM
+            </button>
+            <button type="button" onclick="App.applySchedulePreset('all-pm')" class="px-2.5 py-1 text-xs font-semibold rounded-lg bg-surface dark:bg-[#121F19] hover:bg-blue-50 dark:hover:bg-blue-950/60 text-blue-700 dark:text-blue-300 border border-blue-200 dark:border-blue-800 transition-colors">
+              ⛅ Todos PM
+            </button>
+            <button type="button" onclick="App.applySchedulePreset('alternate')" class="px-2.5 py-1 text-xs font-semibold rounded-lg bg-surface dark:bg-[#121F19] hover:bg-purple-50 dark:hover:bg-purple-950/60 text-purple-700 dark:text-purple-300 border border-purple-200 dark:border-purple-800 transition-colors">
+              🔄 Alternar AM/PM
+            </button>
+            <button type="button" onclick="App.applySchedulePreset('weekend-pm')" class="px-2.5 py-1 text-xs font-semibold rounded-lg bg-surface dark:bg-[#121F19] hover:bg-amber-50 dark:hover:bg-amber-950/60 text-amber-700 dark:text-amber-300 border border-amber-200 dark:border-amber-800 transition-colors">
+              ⛳ Fin de Semana PM
+            </button>
+          </div>
+        </div>
+
+        <!-- Weekly Availability Matrix (Lunes a Domingo con 4 opciones) -->
+        <h3 class="text-sm font-extrabold text-primary dark:text-white uppercase tracking-wider mb-3 flex items-center gap-2">
+          <span class="material-symbols-outlined text-accent-leaf text-base">calendar_view_week</span>
+          <span>Turno de cada día (AM: Mañana • PM: Tarde • Estudia • Descanso)</span>
+        </h3>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 mb-6" id="weekly-schedule-matrix">
+          <!-- Populated by JavaScript for 7 days -->
+        </div>
+
+        <!-- Foundation Notes / Academics Field -->
+        <div class="mb-6">
+          <label for="edit-foundation-notes" class="text-xs font-bold text-text-muted dark:text-[#9BB0A5] uppercase tracking-wider block mb-1.5 flex items-center gap-1.5">
+            <span class="material-symbols-outlined text-amber-500 text-sm">school</span>
+            <span>Notas Académicas / Apoyo Fundación</span>
+          </label>
+          <input 
+            id="edit-foundation-notes" 
+            type="text" 
+            class="w-full h-11 px-3 rounded-xl bg-surface-low dark:bg-[#0B1611] border border-surface-high dark:border-[#1C2D25] text-sm text-primary dark:text-white" 
+            placeholder="Ej. Beca deportiva Fundación Club Campestre, tutorías martes y jueves..."
+          >
+        </div>
+
+        <!-- Actions -->
+        <div class="flex items-center justify-end gap-3 pt-6 border-t border-surface-high dark:border-[#1C2D25]">
+          <button onclick="App.navigate('view-admin')" class="px-5 py-2.5 text-sm font-semibold text-text-muted dark:text-[#9BB0A5] hover:bg-surface-low dark:hover:bg-[#0B1611] rounded-xl transition-colors">
+            Cancelar
+          </button>
+          <button onclick="App.saveCaddieSchedule()" class="px-6 py-2.5 bg-primary hover:bg-primary-container dark:bg-accent-leaf dark:hover:bg-emerald-500 text-white dark:text-[#0A120E] font-bold text-sm rounded-xl flex items-center gap-1.5 shadow-sm transition-all active:scale-95">
+            <span class="material-symbols-outlined text-base">save</span>
+            <span>Guardar Horario</span>
+          </button>
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ========================================== -->
+  <!-- MODALS -->
+  <!-- ========================================== -->
+
+  <!-- Modal: Registrar Nuevo Caddie -->
+  <div id="modal-new-caddie" class="fixed inset-0 z-50 bg-black/60 dark:bg-black/80 backdrop-blur-sm hidden items-center justify-center p-4">
+    <div class="bg-surface dark:bg-[#121F19] w-full max-w-md rounded-2xl shadow-elevated border border-surface-high dark:border-[#1C2D25] p-6 slide-up">
+      <div class="flex items-center justify-between pb-4 border-b border-surface-high dark:border-[#1C2D25] mb-4">
+        <h3 class="text-lg font-bold text-primary dark:text-white">Registrar Nuevo Caddie</h3>
+        <button onclick="App.closeModal('modal-new-caddie')" class="p-1 text-text-muted dark:text-[#9BB0A5] hover:bg-surface-low dark:hover:bg-[#1C2D25] rounded-lg">
+          <span class="material-symbols-outlined">close</span>
+        </button>
+      </div>
+
+      <form id="form-new-caddie" class="space-y-3" onsubmit="App.handleCreateCaddie(event)">
+        <div>
+          <label class="text-xs font-bold text-text-muted dark:text-[#9BB0A5] block mb-1">Nombre Completo</label>
+          <input id="new-caddie-name" type="text" class="w-full h-10 px-3 rounded-xl bg-surface-low dark:bg-[#0B1611] border border-surface-high dark:border-[#1C2D25] text-sm text-text-main dark:text-white" placeholder="Ej. Roberto Gómez" required>
+        </div>
+
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="text-xs font-bold text-text-muted dark:text-[#9BB0A5] block mb-1">Documento / Cédula</label>
+            <input id="new-caddie-doc" type="number" class="w-full h-10 px-3 rounded-xl bg-surface-low dark:bg-[#0B1611] border border-surface-high dark:border-[#1C2D25] text-sm text-text-main dark:text-white" placeholder="Ej. 10987654" required>
+          </div>
+          <div>
+            <label class="text-xs font-bold text-text-muted dark:text-[#9BB0A5] block mb-1">Categoría</label>
+            <select id="new-caddie-category" class="w-full h-10 px-3 rounded-xl bg-surface-low dark:bg-[#0B1611] border border-surface-high dark:border-[#1C2D25] text-sm font-semibold text-text-main dark:text-white">
+              <option value="Categoría 1">Caddie Categoría 1</option>
+              <option value="Categoría 2">Caddie Categoría 2</option>
+              <option value="Categoría 3">Caddie Categoría 3</option>
+              <option value="Tenis">Caddie de Tenis</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="text-xs font-bold text-text-muted dark:text-[#9BB0A5] block mb-1">Sede Principal</label>
+            <select id="new-caddie-venue" class="w-full h-10 px-3 rounded-xl bg-surface-low dark:bg-[#0B1611] border border-surface-high dark:border-[#1C2D25] text-sm font-semibold text-text-main dark:text-white">
+              <option value="Llanogrande">Llanogrande</option>
+              <option value="Medellín">Medellín</option>
+            </select>
+          </div>
+          <div>
+            <label class="text-xs font-bold text-text-muted dark:text-[#9BB0A5] block mb-1">Teléfono</label>
+            <input id="new-caddie-phone" type="tel" class="w-full h-10 px-3 rounded-xl bg-surface-low dark:bg-[#0B1611] border border-surface-high dark:border-[#1C2D25] text-sm text-text-main dark:text-white" placeholder="+57 300 000 0000">
+          </div>
+        </div>
+
+        <div>
+          <label class="text-xs font-bold text-text-muted dark:text-[#9BB0A5] block mb-1">Turno Inicial Predeterminado</label>
+          <select id="new-caddie-initial-shift" class="w-full h-10 px-3 rounded-xl bg-surface-low dark:bg-[#0B1611] border border-surface-high dark:border-[#1C2D25] text-sm font-semibold text-text-main dark:text-white">
+            <option value="AM">☀️ Turno AM (Mañana)</option>
+            <option value="PM">⛅ Turno PM (Tarde)</option>
+            <option value="alternate">🔄 Alternado (AM / PM)</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="text-xs font-bold text-text-muted dark:text-[#9BB0A5] block mb-1">Notas Fundación</label>
+          <input id="new-caddie-notes" type="text" class="w-full h-10 px-3 rounded-xl bg-surface-low dark:bg-[#0B1611] border border-surface-high dark:border-[#1C2D25] text-sm text-text-main dark:text-white" placeholder="Programa de formación, beca...">
+        </div>
+
+        <div class="flex items-center justify-end gap-2 pt-4 border-t border-surface-high dark:border-[#1C2D25]">
+          <button type="button" onclick="App.closeModal('modal-new-caddie')" class="px-4 py-2 text-xs font-semibold text-text-muted dark:text-[#9BB0A5] hover:bg-surface-low dark:hover:bg-[#0B1611] rounded-xl">Cancelar</button>
+          <button type="submit" class="px-5 py-2 bg-primary hover:bg-primary-container dark:bg-accent-leaf dark:hover:bg-emerald-500 text-white dark:text-[#0A120E] font-bold text-xs rounded-xl">Guardar Caddie</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Toast Notification Container -->
+  <div id="toast-container"></div>
+
+  <!-- Scripts -->
+  <script src="data.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
