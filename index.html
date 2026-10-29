@@ -2,7 +2,11 @@
 <html lang="es" class="light">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <meta name="theme-color" content="#082F22">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <link rel="manifest" href="manifest.json">
   <title>CaddiePro - Fundación Club Campestre de Medellín y Llanogrande</title>
   
   <!-- Prevent dark mode flash -->
@@ -122,9 +126,27 @@
   </header>
 
   <!-- ========================================== -->
+  <!-- TOP CONNECTIVITY & OFFLINE BANNER (REQUERIMIENTO 7) -->
+  <!-- ========================================== -->
+  <div id="network-banner" class="fixed top-16 left-0 right-0 z-30 px-3 sm:px-4 py-1.5 text-xs font-bold border-b transition-all bg-emerald-50 dark:bg-emerald-950/80 text-emerald-800 dark:text-emerald-200 border-emerald-200 dark:border-emerald-800">
+    <div class="flex items-center justify-between max-w-6xl mx-auto w-full gap-2">
+      <div class="flex items-center gap-2 overflow-hidden">
+        <span id="network-indicator-dot" class="w-2.5 h-2.5 rounded-full bg-accent-leaf animate-pulse shrink-0"></span>
+        <span id="network-status-text" class="truncate">En Línea • Sincronización Automática Activa</span>
+      </div>
+      <div class="flex items-center gap-2 shrink-0">
+        <span id="network-mode-pill" class="hidden sm:inline-block text-[10px] uppercase tracking-wider px-2 py-0.5 rounded-full bg-emerald-100 dark:bg-emerald-900 text-emerald-800 dark:text-emerald-300 font-extrabold">Online</span>
+        <button id="toggle-sim-offline-btn" type="button" onclick="App.toggleSimulateOffline()" class="px-2.5 py-0.5 rounded-lg text-[11px] font-bold bg-white dark:bg-[#121F19] text-primary dark:text-accent-mint border border-surface-high dark:border-[#1C2D25] hover:bg-surface-low dark:hover:bg-[#182A22] transition-colors shadow-xs" title="Simular comportamiento sin conexión para verificar funcionamiento offline-first">
+          ⚡ Simular Offline
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================== -->
   <!-- MAIN APP CONTAINER / ROUTER CANVAS -->
   <!-- ========================================== -->
-  <main class="flex-grow pt-20 pb-16 px-4 sm:px-6 md:px-8 max-w-6xl mx-auto w-full flex flex-col justify-start">
+  <main class="flex-grow pt-28 pb-24 md:pb-16 px-4 sm:px-6 md:px-8 max-w-6xl mx-auto w-full flex flex-col justify-start">
 
     <!-- ========================================== -->
     <!-- VIEW 1: CONSULTA DE HORARIO (PÚBLICA) -->
@@ -217,6 +239,10 @@
                 Documento: <span id="res-caddie-doc" class="font-mono font-semibold">10203040</span> • Sede: <span id="res-caddie-venue" class="font-semibold">Llanogrande</span>
               </p>
             </div>
+            <button onclick="App.openCheckinForCurrentCaddie()" class="self-start sm:self-center px-4 py-2.5 rounded-xl bg-accent-leaf hover:bg-emerald-400 text-[#0A120E] font-extrabold text-xs flex items-center gap-2 shadow-md active:scale-95 transition-all">
+              <span class="material-symbols-outlined text-lg">my_location</span>
+              <span>Marcar Asistencia GPS / Foto</span>
+            </button>
           </div>
         </div>
 
@@ -398,11 +424,15 @@
 
       <!-- Navigation Tabs for Admin -->
       <div class="flex items-center gap-2 border-b border-surface-high dark:border-[#1C2D25] mb-6 overflow-x-auto pb-1">
-        <button id="admin-tab-roster" onclick="App.switchAdminTab('roster')" class="px-4 py-2.5 font-bold text-sm border-b-2 border-primary dark:border-accent-mint text-primary dark:text-accent-mint flex items-center gap-2 transition-all">
+        <button id="admin-tab-roster" onclick="App.switchAdminTab('roster')" class="px-4 py-2.5 font-bold text-sm border-b-2 border-primary dark:border-accent-mint text-primary dark:text-accent-mint flex items-center gap-2 transition-all shrink-0">
           <span class="material-symbols-outlined text-lg">group</span>
           <span>Roster y Horarios Diarios</span>
         </button>
-        <button id="admin-tab-logs" onclick="App.switchAdminTab('logs')" class="px-4 py-2.5 font-semibold text-sm border-b-2 border-transparent text-text-muted dark:text-[#9BB0A5] hover:text-primary dark:hover:text-white flex items-center gap-2 transition-all">
+        <button id="admin-tab-checkins" onclick="App.switchAdminTab('checkins')" class="px-4 py-2.5 font-semibold text-sm border-b-2 border-transparent text-text-muted dark:text-[#9BB0A5] hover:text-primary dark:hover:text-white flex items-center gap-2 transition-all shrink-0">
+          <span class="material-symbols-outlined text-lg">fact_check</span>
+          <span>Asistencias & GPS</span>
+        </button>
+        <button id="admin-tab-logs" onclick="App.switchAdminTab('logs')" class="px-4 py-2.5 font-semibold text-sm border-b-2 border-transparent text-text-muted dark:text-[#9BB0A5] hover:text-primary dark:hover:text-white flex items-center gap-2 transition-all shrink-0">
           <span class="material-symbols-outlined text-lg">history</span>
           <span>Actividad & Logs</span>
         </button>
@@ -458,6 +488,31 @@
           </div>
 
           <div id="admin-logs-container" class="space-y-3">
+            <!-- Populated by JavaScript -->
+          </div>
+        </div>
+      </div>
+
+      <!-- ========================================== -->
+      <!-- ADMIN TAB 3: ASISTENCIAS Y GPS -->
+      <!-- ========================================== -->
+      <div id="admin-content-checkins" class="admin-tab-content hidden">
+        <div class="bg-surface dark:bg-[#121F19] rounded-2xl shadow-card dark:shadow-[0_4px_25px_rgba(0,0,0,0.5)] border border-surface-high dark:border-[#1C2D25] p-6">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-5 pb-4 border-b border-surface-high dark:border-[#1C2D25]">
+            <div>
+              <h3 class="text-lg font-extrabold text-primary dark:text-white flex items-center gap-2">
+                <span class="material-symbols-outlined text-accent-leaf text-2xl">verified_user</span>
+                <span>Asistencias Validadas con Geolocalización y Cámara</span>
+              </h3>
+              <p class="text-xs text-text-muted dark:text-[#9BB0A5]">Evidencias GPS de llegada a sedes Campestre y fotografías móviles</p>
+            </div>
+            <button onclick="App.navigate('view-checkin')" class="px-4 py-2 bg-primary hover:bg-primary-container dark:bg-accent-leaf dark:hover:bg-emerald-500 text-white dark:text-[#0A120E] font-bold text-xs rounded-xl flex items-center gap-1.5 shadow-sm transition-all self-start sm:self-auto active:scale-95">
+              <span class="material-symbols-outlined text-base">add_location_alt</span>
+              <span>+ Nuevo Check-in Móvil</span>
+            </button>
+          </div>
+
+          <div id="admin-checkins-container" class="space-y-3">
             <!-- Populated by JavaScript -->
           </div>
         </div>
@@ -557,6 +612,301 @@
       </div>
     </section>
 
+    <!-- ========================================== -->
+    <!-- VIEW 6: MARCACIÓN DE ASISTENCIA Y CHECK-IN MÓVIL (GPS + CÁMARA) -->
+    <!-- ========================================== -->
+    <section id="view-checkin" class="app-view hidden fade-in w-full max-w-3xl mx-auto py-4">
+      
+      <!-- Back Navigation Header -->
+      <div class="flex items-center justify-between mb-4">
+        <button onclick="App.navigate(App.currentCaddie ? 'view-resultado' : 'view-consultar')" class="flex items-center gap-1.5 text-sm font-bold text-primary dark:text-accent-mint hover:bg-surface-low dark:hover:bg-[#121F19] px-3.5 py-2 rounded-xl transition-colors border border-surface-high dark:border-[#1C2D25]">
+          <span class="material-symbols-outlined text-lg">arrow_back</span>
+          <span>Volver</span>
+        </button>
+        <span class="text-xs font-bold px-3 py-1 rounded-full bg-emerald-50 dark:bg-emerald-950/70 text-emerald-800 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800 flex items-center gap-1.5">
+          <span class="w-2 h-2 rounded-full bg-accent-leaf animate-pulse"></span>
+          <span>Control de Asistencia Móvil</span>
+        </span>
+      </div>
+
+      <!-- Main Check-in Card -->
+      <div class="bg-surface dark:bg-[#121F19] rounded-2xl shadow-card dark:shadow-[0_4px_25px_rgba(0,0,0,0.5)] border border-surface-high dark:border-[#1C2D25] p-6 sm:p-8">
+        
+        <!-- Header Banner with Title -->
+        <div class="text-center sm:text-left pb-5 border-b border-surface-high dark:border-[#1C2D25] mb-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div class="flex items-center gap-3.5">
+            <div class="w-12 h-12 rounded-2xl bg-gradient-to-br from-primary to-primary-container dark:from-[#1D3B2E] dark:to-[#0B1611] flex items-center justify-center text-accent-mint shadow-md shrink-0">
+              <span class="material-symbols-outlined text-2xl">location_on</span>
+            </div>
+            <div>
+              <h2 class="text-xl sm:text-2xl font-extrabold text-primary dark:text-white tracking-tight">Registro de Asistencia en Turno</h2>
+              <p class="text-xs text-text-muted dark:text-[#9BB0A5]">Validación en sitio mediante Geolocalización GPS y evidencia fotográfica</p>
+            </div>
+          </div>
+          <div class="flex items-center gap-1 self-center sm:self-auto">
+            <span class="text-[11px] font-bold px-2.5 py-1 rounded-lg bg-surface-low dark:bg-[#0B1611] border border-surface-high dark:border-[#1C2D25] text-accent-leaf">
+              Capacidades Móviles
+            </span>
+          </div>
+        </div>
+
+        <!-- Caddie Selector / Context Banner -->
+        <div class="mb-6 p-4 rounded-xl bg-surface-low dark:bg-[#0B1611] border border-surface-high dark:border-[#1C2D25] flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-xl bg-primary/10 dark:bg-accent-mint/10 text-primary dark:text-accent-mint flex items-center justify-center font-bold text-base border border-primary/20 dark:border-accent-mint/20">
+              <span class="material-symbols-outlined">person</span>
+            </div>
+            <div>
+              <span class="text-[11px] font-bold uppercase tracking-wider text-text-muted dark:text-[#9BB0A5] block">Caddie a Reportar</span>
+              <h3 id="checkin-caddie-name" class="text-base font-extrabold text-primary dark:text-white">Juan Pérez</h3>
+              <p class="text-xs text-text-muted dark:text-[#9BB0A5]">Doc: <span id="checkin-caddie-doc" class="font-mono font-semibold">10203040</span> • Sede Asignada: <span id="checkin-caddie-assigned-venue" class="font-semibold text-primary dark:text-accent-mint">Llanogrande</span></p>
+            </div>
+          </div>
+          <div class="flex items-center gap-2">
+            <select id="checkin-caddie-selector" onchange="App.handleCheckinCaddieChange(this.value)" class="text-xs font-bold rounded-xl bg-surface dark:bg-[#121F19] border border-surface-high dark:border-[#1C2D25] py-2 px-3 text-text-main dark:text-white">
+              <!-- Populated dynamically -->
+            </select>
+          </div>
+        </div>
+
+        <!-- Checkin Configuration: Turno y Sede -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
+          <div>
+            <label class="text-xs font-bold text-text-muted dark:text-[#9BB0A5] uppercase tracking-wider block mb-1.5 flex items-center gap-1.5">
+              <span class="material-symbols-outlined text-sm text-accent-leaf">schedule</span>
+              <span>Jornada / Turno a Iniciar</span>
+            </label>
+            <select id="checkin-shift-select" class="w-full h-11 px-3 rounded-xl bg-surface-low dark:bg-[#0B1611] border border-surface-high dark:border-[#1C2D25] text-sm font-bold text-text-main dark:text-white">
+              <option value="Turno AM (Mañana)">☀️ Turno AM (Mañana • 06:00 - 13:30)</option>
+              <option value="Turno PM (Tarde)">⛅ Turno PM (Tarde • 12:30 - 19:00)</option>
+              <option value="Doble Turno">⛳ Doble Turno (Evento / Torneo Especial)</option>
+            </select>
+          </div>
+          <div>
+            <label class="text-xs font-bold text-text-muted dark:text-[#9BB0A5] uppercase tracking-wider block mb-1.5 flex items-center gap-1.5">
+              <span class="material-symbols-outlined text-sm text-accent-leaf">domain</span>
+              <span>Sede de Asistencia</span>
+            </label>
+            <select id="checkin-venue-select" onchange="App.handleVenueChange()" class="w-full h-11 px-3 rounded-xl bg-surface-low dark:bg-[#0B1611] border border-surface-high dark:border-[#1C2D25] text-sm font-bold text-text-main dark:text-white">
+              <option value="Llanogrande">Club Campestre Llanogrande (Rionegro)</option>
+              <option value="Medellín">Club Campestre Medellín (El Poblado)</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- ========================================== -->
+        <!-- CAPACIDAD MÓVIL 1: GEOLOCALIZACIÓN GPS     -->
+        <!-- ========================================== -->
+        <div class="mb-6 p-5 rounded-2xl bg-surface-low dark:bg-[#0B1611] border border-surface-high dark:border-[#1C2D25]">
+          <div class="flex items-center justify-between mb-4 flex-wrap gap-2">
+            <div class="flex items-center gap-2">
+              <span class="w-8 h-8 rounded-xl bg-accent-leaf/10 text-accent-leaf flex items-center justify-center font-bold">
+                <span class="material-symbols-outlined text-xl">near_me</span>
+              </span>
+              <div>
+                <h4 class="text-sm font-extrabold text-primary dark:text-white">1. Geolocalización Móvil (GPS)</h4>
+                <span class="text-[11px] text-text-muted dark:text-[#9BB0A5]">Comprobación de presencia física en las canchas del club</span>
+              </div>
+            </div>
+            <span id="gps-status-badge" class="px-2.5 py-1 rounded-full text-xs font-bold bg-amber-50 dark:bg-amber-950/80 text-amber-700 dark:text-amber-300 border border-amber-200 dark:border-amber-800 flex items-center gap-1">
+              <span class="w-2 h-2 rounded-full bg-amber-500"></span>
+              <span>Esperando captura GPS</span>
+            </span>
+          </div>
+
+          <!-- GPS Trigger Button & Radar -->
+          <div class="flex flex-col sm:flex-row items-center gap-4 mb-4">
+            <button type="button" id="btn-capture-gps" onclick="App.captureGPSLocation()" class="w-full sm:w-auto h-12 px-6 bg-primary hover:bg-primary-container dark:bg-accent-leaf dark:hover:bg-emerald-500 text-white dark:text-[#0A120E] font-bold text-xs sm:text-sm rounded-xl flex items-center justify-center gap-2 shadow-sm transition-all active:scale-95">
+              <span class="material-symbols-outlined text-lg">my_location</span>
+              <span>Obtener Coordenadas GPS en Vivo</span>
+            </button>
+            <div id="gps-scanning-radar" class="hidden items-center gap-2 text-xs font-bold text-accent-leaf">
+              <div class="radar-scanner scale-75">
+                <div class="radar-circle"></div>
+                <div class="radar-circle"></div>
+                <div class="radar-circle"></div>
+                <span class="material-symbols-outlined text-accent-leaf text-2xl relative z-10">satellite_alt</span>
+              </div>
+              <span>Sintonizando satélites GPS...</span>
+            </div>
+          </div>
+
+          <!-- GPS Results Card -->
+          <div id="gps-results-container" class="hidden bg-surface dark:bg-[#121F19] rounded-xl p-4 border border-surface-high dark:border-[#1C2D25] space-y-3">
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 text-xs">
+              <div class="p-2.5 rounded-lg bg-surface-low dark:bg-[#0B1611] border border-surface-high dark:border-[#1C2D25]">
+                <span class="text-[10px] uppercase font-bold text-text-muted dark:text-[#9BB0A5] block">Latitud</span>
+                <span id="gps-val-lat" class="font-mono font-bold text-primary dark:text-accent-mint text-xs">6.130540°</span>
+              </div>
+              <div class="p-2.5 rounded-lg bg-surface-low dark:bg-[#0B1611] border border-surface-high dark:border-[#1C2D25]">
+                <span class="text-[10px] uppercase font-bold text-text-muted dark:text-[#9BB0A5] block">Longitud</span>
+                <span id="gps-val-lng" class="font-mono font-bold text-primary dark:text-accent-mint text-xs">-75.434420°</span>
+              </div>
+              <div class="p-2.5 rounded-lg bg-surface-low dark:bg-[#0B1611] border border-surface-high dark:border-[#1C2D25]">
+                <span class="text-[10px] uppercase font-bold text-text-muted dark:text-[#9BB0A5] block">Margen Error</span>
+                <span id="gps-val-acc" class="font-mono font-bold text-text-main dark:text-white text-xs">± 8 m</span>
+              </div>
+              <div class="p-2.5 rounded-lg bg-surface-low dark:bg-[#0B1611] border border-surface-high dark:border-[#1C2D25]">
+                <span class="text-[10px] uppercase font-bold text-text-muted dark:text-[#9BB0A5] block">Distancia Sede</span>
+                <span id="gps-val-dist" class="font-mono font-bold text-accent-leaf text-xs">35 m</span>
+              </div>
+            </div>
+
+            <!-- Distance and Verification Verdict Banner -->
+            <div id="gps-verdict-banner" class="p-3 rounded-lg bg-emerald-50 dark:bg-emerald-950/80 border border-emerald-200 dark:border-emerald-800 text-xs font-semibold text-emerald-900 dark:text-emerald-200 flex items-center gap-2">
+              <span class="material-symbols-outlined text-accent-leaf text-lg">check_circle</span>
+              <span id="gps-verdict-text">Verificación exitosa: El caddie se encuentra en las instalaciones del Club Campestre.</span>
+            </div>
+          </div>
+
+          <!-- GPS Permission Denied / Error Box -->
+          <div id="gps-error-container" class="hidden mt-3 p-3.5 rounded-xl bg-amber-50 dark:bg-amber-950/60 border border-amber-200 dark:border-amber-800 text-xs text-amber-900 dark:text-amber-200">
+            <div class="flex items-start gap-2">
+              <span class="material-symbols-outlined text-amber-600 dark:text-amber-400 text-lg shrink-0 mt-0.5">warning</span>
+              <div>
+                <p id="gps-error-msg" class="font-bold">Permiso de Geolocalización no otorgado.</p>
+                <p class="text-[11px] text-amber-800 dark:text-amber-300 mt-1">El navegador o dispositivo rechazó la solicitud de ubicación. El sistema permite registrar la asistencia utilizando las coordenadas estimadas del club o justificando en las notas.</p>
+                <button type="button" onclick="App.captureGPSLocation(true)" class="mt-2 text-xs font-bold underline hover:text-amber-950 dark:hover:text-amber-100">
+                  Reintentar solicitud de permiso GPS
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ========================================== -->
+        <!-- CAPACIDAD MÓVIL 2: CÁMARA & EVIDENCIA FOTO -->
+        <!-- ========================================== -->
+        <div class="mb-6 p-5 rounded-2xl bg-surface-low dark:bg-[#0B1611] border border-surface-high dark:border-[#1C2D25]">
+          <div class="flex items-center justify-between mb-4 flex-wrap gap-2">
+            <div class="flex items-center gap-2">
+              <span class="w-8 h-8 rounded-xl bg-blue-500/10 text-blue-500 flex items-center justify-center font-bold">
+                <span class="material-symbols-outlined text-xl">photo_camera</span>
+              </span>
+              <div>
+                <h4 class="text-sm font-extrabold text-primary dark:text-white">2. Cámara y Evidencia Fotográfica</h4>
+                <span class="text-[11px] text-text-muted dark:text-[#9BB0A5]">Foto de carné / porte del uniforme oficial de caddie</span>
+              </div>
+            </div>
+            <span id="camera-status-badge" class="px-2.5 py-1 rounded-full text-xs font-bold bg-gray-100 dark:bg-[#1C2D25] text-gray-700 dark:text-[#9BB0A5] border border-surface-high dark:border-[#2D4439] flex items-center gap-1">
+              <span class="w-2 h-2 rounded-full bg-gray-400"></span>
+              <span id="camera-status-text">Cámara en espera</span>
+            </span>
+          </div>
+
+          <!-- Camera Controls Toolbar -->
+          <div class="flex items-center gap-2 flex-wrap mb-4">
+            <button type="button" id="btn-start-camera" onclick="App.startCamera()" class="px-4 py-2 bg-primary hover:bg-primary-container dark:bg-accent-leaf dark:hover:bg-emerald-500 text-white dark:text-[#0A120E] font-bold text-xs rounded-xl flex items-center gap-1.5 shadow-sm transition-all active:scale-95">
+              <span class="material-symbols-outlined text-base">videocam</span>
+              <span>Abrir Cámara en Vivo</span>
+            </button>
+            <button type="button" id="btn-snap-camera" onclick="App.takePhotoSnapshot()" class="hidden px-4 py-2 bg-accent-leaf hover:bg-emerald-500 text-[#0A120E] font-extrabold text-xs rounded-xl flex items-center gap-1.5 shadow-sm transition-all active:scale-95 animate-pulse">
+              <span class="material-symbols-outlined text-base">camera</span>
+              <span>Tomar Fotografía</span>
+            </button>
+            <button type="button" id="btn-stop-camera" onclick="App.stopCamera()" class="hidden px-3 py-2 text-rose-600 dark:text-rose-400 hover:bg-rose-50 dark:hover:bg-rose-950/40 rounded-xl text-xs font-bold transition-colors">
+              Cerrar Cámara
+            </button>
+            <label class="px-3.5 py-2 rounded-xl bg-surface dark:bg-[#121F19] hover:bg-surface-high dark:hover:bg-[#1C2D25] border border-surface-high dark:border-[#1C2D25] text-xs font-semibold text-text-main dark:text-white flex items-center gap-1.5 cursor-pointer transition-colors">
+              <span class="material-symbols-outlined text-base text-accent-leaf">upload_file</span>
+              <span>O Subir Archivo</span>
+              <input type="file" id="camera-file-input" accept="image/*" capture="user" onchange="App.handlePhotoFileUpload(event)" class="hidden">
+            </label>
+          </div>
+
+          <!-- Camera Live Viewfinder Window -->
+          <div id="camera-viewport-box" class="hidden mb-4 max-w-sm mx-auto camera-viewfinder border-2 border-accent-leaf/60 shadow-elevated">
+            <video id="camera-video-stream" autoplay playsinline muted class="w-full h-full object-cover"></video>
+            <div class="viewfinder-corners"></div>
+            <div class="absolute bottom-2 left-2 right-2 flex justify-between items-center text-[10px] text-white/80 bg-black/50 px-2 py-1 rounded-md backdrop-blur-sm pointer-events-none">
+              <span>Transmisión en Vivo</span>
+              <span id="camera-res-label">640x480</span>
+            </div>
+          </div>
+
+          <!-- Canvas for snapshot extraction (hidden) -->
+          <canvas id="camera-canvas" class="hidden"></canvas>
+
+          <!-- Captured Photo Preview Container -->
+          <div id="camera-preview-container" class="hidden max-w-sm mx-auto bg-surface dark:bg-[#121F19] rounded-2xl p-3 border border-surface-high dark:border-[#1C2D25] shadow-sm">
+            <div class="relative rounded-xl overflow-hidden aspect-4/3 bg-black">
+              <img id="camera-preview-img" src="" alt="Evidencia Asistencia" class="w-full h-full object-cover">
+              <div class="absolute bottom-2 left-2 right-2 bg-black/70 backdrop-blur-md text-white p-2 rounded-lg text-[10px] font-mono leading-tight">
+                <div class="font-bold text-accent-mint flex items-center gap-1">
+                  <span class="material-symbols-outlined text-xs">verified</span>
+                  <span>EVIDENCIA VALIDADA CADDIEPRO</span>
+                </div>
+                <div id="photo-watermark-text" class="mt-0.5 text-gray-300">GPS: 6.130540, -75.434420 • Hoy</div>
+              </div>
+            </div>
+            <div class="flex items-center justify-between mt-2 pt-2 border-t border-surface-high dark:border-[#1C2D25]">
+              <span class="text-xs font-bold text-accent-leaf flex items-center gap-1">
+                <span class="material-symbols-outlined text-sm">check_circle</span>
+                <span>Foto Capturada</span>
+              </span>
+              <button type="button" onclick="App.retakePhoto()" class="text-xs font-semibold text-text-muted dark:text-[#9BB0A5] hover:underline">
+                Repetir foto
+              </button>
+            </div>
+          </div>
+
+          <!-- Camera Error Box -->
+          <div id="camera-error-box" class="hidden mt-3 p-3.5 rounded-xl bg-amber-50 dark:bg-amber-950/60 border border-amber-200 dark:border-amber-800 text-xs text-amber-900 dark:text-amber-200">
+            <p class="font-bold">Acceso a Cámara no disponible o denegado por el usuario.</p>
+            <p class="text-[11px] text-amber-800 dark:text-amber-300 mt-0.5">Puedes utilizar el botón "Subir Archivo" para adjuntar una foto tomada directamente con la aplicación de cámara de tu dispositivo.</p>
+          </div>
+        </div>
+
+        <!-- Checkin Notes & Observations -->
+        <div class="mb-6">
+          <label for="checkin-notes" class="text-xs font-bold text-text-muted dark:text-[#9BB0A5] uppercase tracking-wider block mb-1.5 flex items-center gap-1.5">
+            <span class="material-symbols-outlined text-accent-leaf text-sm">notes</span>
+            <span>Observaciones / Novedades de Llegada</span>
+          </label>
+          <input 
+            id="checkin-notes" 
+            type="text" 
+            class="w-full h-11 px-3.5 rounded-xl bg-surface-low dark:bg-[#0B1611] border border-surface-high dark:border-[#1C2D25] text-sm text-text-main dark:text-white" 
+            placeholder="Ej. Llegada puntual, bolso asignado en hoyo 1..."
+          >
+        </div>
+
+        <!-- Submit Button for Check-in -->
+        <div class="pt-4 border-t border-surface-high dark:border-[#1C2D25] flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div class="text-xs text-text-muted dark:text-[#9BB0A5] flex items-center gap-1">
+            <span class="material-symbols-outlined text-accent-leaf text-base">save</span>
+            <span>Persistencia local automática en almacenamiento del dispositivo</span>
+          </div>
+          <button type="button" onclick="App.submitCheckin()" class="w-full sm:w-auto px-7 py-3 bg-primary hover:bg-primary-container dark:bg-accent-leaf dark:hover:bg-emerald-500 text-white dark:text-[#0A120E] font-extrabold text-sm rounded-xl flex items-center justify-center gap-2 shadow-md active:scale-95 transition-all">
+            <span class="material-symbols-outlined text-xl">how_to_reg</span>
+            <span>Confirmar y Guardar Asistencia</span>
+          </button>
+        </div>
+
+      </div>
+
+      <!-- Local Check-ins History (Verificación de Persistencia Local) -->
+      <div class="mt-8 bg-surface dark:bg-[#121F19] rounded-2xl shadow-card dark:shadow-[0_4px_25px_rgba(0,0,0,0.5)] border border-surface-high dark:border-[#1C2D25] p-6">
+        <div class="flex items-center justify-between mb-4 pb-3 border-b border-surface-high dark:border-[#1C2D25]">
+          <div>
+            <h3 class="text-base font-extrabold text-primary dark:text-white flex items-center gap-2">
+              <span class="material-symbols-outlined text-accent-leaf">history</span>
+              <span>Historial de Asistencias Guardadas (Persistencia Local)</span>
+            </h3>
+            <p class="text-xs text-text-muted dark:text-[#9BB0A5]">Estos registros permanecen en memoria después de cerrar o reiniciar la aplicación</p>
+          </div>
+          <span class="text-xs font-mono font-bold px-2 py-0.5 rounded bg-surface-low dark:bg-[#0B1611] text-accent-leaf border border-surface-high dark:border-[#1C2D25]">
+            LocalStorage
+          </span>
+        </div>
+
+        <div id="checkins-history-list" class="space-y-3">
+          <!-- Populated by JavaScript -->
+        </div>
+      </div>
+
+    </section>
+
   </main>
 
   <!-- ========================================== -->
@@ -630,6 +980,47 @@
       </form>
     </div>
   </div>
+
+  <!-- Modal: Confirmar Eliminación de Caddie (Ciclo CRUD Completo) -->
+  <div id="modal-confirm-delete" class="fixed inset-0 z-50 bg-black/60 dark:bg-black/80 backdrop-blur-sm hidden items-center justify-center p-4">
+    <div class="bg-surface dark:bg-[#121F19] w-full max-w-sm rounded-2xl shadow-elevated border border-surface-high dark:border-[#1C2D25] p-6 slide-up text-center">
+      <div class="w-12 h-12 mx-auto mb-3 rounded-2xl bg-rose-100 dark:bg-rose-950/60 text-rose-600 dark:text-rose-400 flex items-center justify-center">
+        <span class="material-symbols-outlined text-2xl">delete_forever</span>
+      </div>
+      <h3 class="text-lg font-bold text-primary dark:text-white mb-1">¿Eliminar Caddie?</h3>
+      <p class="text-xs text-text-muted dark:text-[#9BB0A5] mb-4">Esta acción retirará a <span id="delete-caddie-name" class="font-bold text-text-main dark:text-white"></span> de la base de datos local.</p>
+      <div class="flex items-center justify-center gap-2">
+        <button type="button" onclick="App.closeModal('modal-confirm-delete')" class="px-4 py-2 text-xs font-semibold rounded-xl border border-surface-high dark:border-[#1C2D25] text-text-muted dark:text-[#9BB0A5] hover:bg-surface-low">
+          Cancelar
+        </button>
+        <button type="button" onclick="App.executeDeleteCaddie()" class="px-5 py-2 text-xs font-bold rounded-xl bg-rose-600 hover:bg-rose-700 text-white shadow-sm">
+          Sí, Eliminar
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================== -->
+  <!-- MOBILE BOTTOM NAVIGATION (REQUERIMIENTO 3 & 8) -->
+  <!-- ========================================== -->
+  <nav class="bottom-nav md:hidden">
+    <button class="bottom-nav-item active" id="bnav-consultar" onclick="App.navigate('view-consultar')">
+      <span class="material-symbols-outlined">search</span>
+      <span>Consultar</span>
+    </button>
+    <button class="bottom-nav-item" id="bnav-resultado" onclick="App.goToMySchedule()">
+      <span class="material-symbols-outlined">calendar_today</span>
+      <span>Mi Turno</span>
+    </button>
+    <button class="bottom-nav-item" id="bnav-checkin" onclick="App.openCheckinView()">
+      <span class="material-symbols-outlined">my_location</span>
+      <span>Check-in GPS</span>
+    </button>
+    <button class="bottom-nav-item" id="bnav-admin" onclick="App.navigate('view-admin')">
+      <span class="material-symbols-outlined">shield_person</span>
+      <span>Admin</span>
+    </button>
+  </nav>
 
   <!-- Toast Notification Container -->
   <div id="toast-container"></div>

@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Examen 2: Segundo Incremento del Proyecto - CaddiePro Prototipo Móvil Funcional</title>
+<style>
+  @page {
+    size: letter;
+    margin: 1.8cm 2.0cm 1.8cm 2.0cm;
+  }
+
+  * {
+    box-sizing: border-box;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  body {
+    font-family: 'Segoe UI', Arial, Helvetica, sans-serif;
+    font-size: 10pt;
+    line-height: 1.36;
+    color: #1a1a1a;
+    background-color: #ffffff;
+    margin: 0;
+    padding: 0;
+  }
+
+  /* Force exact page sheet height */
+  .page-sheet {
+    page-break-after: always;
+    break-after: page;
+    height: 24.0cm;
+    max-height: 24.0cm;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    overflow: hidden;
+  }
+
+  .page-sheet:last-of-type {
+    page-break-after: avoid;
+    break-after: avoid;
+  }
+
+  .page-body {
+    flex-grow: 1;
+  }
+
+  .page-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-top: 1px solid #cbd5e1;
+    padding-top: 5px;
+    font-size: 8pt;
+    color: #64748b;
+  }
+
+  /* Cover Page */
+  .cover-container {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    text-align: center;
+    padding: 2.5cm 0 1cm 0;
+  }
+
+  .cover-badge {
+    display: inline-block;
+    padding: 6px 14px;
+    background-color: #ECFDF5;
+    border: 1px solid #A7F3D0;
+    border-radius: 20px;
+    color: #065F46;
+    font-weight: 700;
+    font-size: 9.5pt;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 20px;
+  }
+
+  .cover-title-area h1 {
+    font-size: 21pt;
+    font-weight: 800;
+    color: #082F22;
+    margin: 0 0 8px 0;
+    line-height: 1.2;
+  }
+
+  .cover-title-area h2 {
+    font-size: 14pt;
+    font-weight: 600;
+    color: #24523B;
+    margin: 0 0 14px 0;
+  }
+
+  .cover-title-area h3 {
+    font-size: 11pt;
+    font-weight: normal;
+    color: #475569;
+    margin: 0;
+  }
+
+  .cover-authors-area {
+    margin: 2cm 0;
+    font-size: 11pt;
+    color: #1e293b;
+    line-height: 1.6;
+  }
+
+  .cover-inst-area {
+    font-size: 10pt;
+    color: #334155;
+    line-height: 1.5;
+  }
+
+  /* Headers */
+  h2.section-header {
+    font-size: 11.5pt;
+    font-weight: 800;
+    color: #082F22;
+    border-bottom: 2px solid #24523B;
+    padding-bottom: 2px;
+    margin: 8px 0 5px 0;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  h3.subsection-header {
+    font-size: 10pt;
+    font-weight: 700;
+    color: #1E293B;
+    margin: 7px 0 3px 0;
+  }
+
+  p {
+    margin: 0 0 5px 0;
+    text-align: justify;
+  }
+
+  ul, ol {
+    margin: 0 0 6px 0;
+    padding-left: 18px;
+  }
+
+  li {
+    margin-bottom: 2.5px;
+  }
+
+  /* Tables */
+  table.data-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 5px 0 7px 0;
+    font-size: 8.2pt;
+  }
+
+  table.data-table th, table.data-table td {
+    border: 1px solid #cbd5e1;
+    padding: 3.5px 6.5px;
+    text-align: left;
+  }
+
+  table.data-table th {
+    background-color: #F1F5F9;
+    color: #0F172A;
+    font-weight: 700;
+  }
+
+  table.data-table tr:nth-child(even) {
+    background-color: #F8FAFC;
+  }
+
+  /* Callout boxes */
+  .callout-box {
+    background-color: #F0FDF4;
+    border-left: 4px solid #3FB65E;
+    padding: 6px 10px;
+    margin: 5px 0 0 0;
+    font-size: 8.3pt;
+    color: #166534;
+    border-radius: 0 6px 6px 0;
+  }
+
+  .flow-box {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: #F8FAFC;
+    border: 1px solid #E2E8F0;
+    padding: 8px 12px;
+    border-radius: 8px;
+    margin: 8px 0;
+    font-size: 8.5pt;
+    font-weight: 600;
+    color: #082F22;
+  }
+
+  .flow-step {
+    text-align: center;
+    flex: 1;
+    padding: 4px;
+    background: #FFFFFF;
+    border: 1px solid #CBD5E1;
+    border-radius: 6px;
+  }
+
+  .flow-arrow {
+    color: #3FB65E;
+    font-weight: bold;
+    padding: 0 5px;
+    font-size: 11pt;
+  }
+
+  .code-pill {
+    font-family: Consolas, monospace;
+    background: #F1F5F9;
+    padding: 1px 4px;
+    border-radius: 4px;
+    font-size: 8.5pt;
+    color: #0F172A;
+    border: 1px solid #E2E8F0;
+  }
+</style>
+</head>
+<body>
+
+<!-- =================================================================== -->
+<!-- PÁGINA 0: PORTADA                                                   -->
+<!-- =================================================================== -->
+<div class="page-sheet">
+  <div class="cover-container">
+    <div></div>
+    
+    <div class="cover-title-area">
+      <h1>CaddiePro</h1>
+      <h2>Plataforma Móvil de Gestión de Horarios y Asistencia</h2>
+      <h3>Prototipo Móvil Funcional con Geolocalización, Cámara y Persistencia Local</h3>
+    </div>
+
+    <div class="cover-authors-area">
+      <strong>Integrantes del Equipo:</strong><br>
+      Jerónimo Mesa<br>
+      Juan Miguel Duarte<br><br>
+      <strong>Institución Colaboradora:</strong> Fundación Club Campestre de Medellín y Llanogrande<br>
+      <strong>Materia:</strong> Desarrollo de Aplicaciones Móviles / Desarrollo Web Avanzado<br>
+      <strong>Docente Evaluador:</strong> Neider Xavier Vergara Humanez
+    </div>
+
+    <div class="cover-inst-area">
+      Facultad de Ingeniería — Programa de Ingeniería de Software<br>
+      Medellín, Colombia<br>
+      <strong>Octubre de 2026</strong>
+    </div>
+  </div>
+</div>
+
+<!-- =================================================================== -->
+<!-- PÁGINA 1: FUNCIONALIDADES Y CONTINUIDAD                             -->
+<!-- =================================================================== -->
+<div class="page-sheet">
+  <div class="page-body">
+    <h2 class="section-header">1. Funcionalidades Implementadas en el Incremento</h2>
+    <p>
+      El presente incremento funcional materializa las decisiones conceptuales y arquitectónicas acordadas en el <strong>Examen 1</strong>, transformándolas en un prototipo móvil interactivo ejecutable. En cumplimiento estricto del alcance definido, se implementó un núcleo cohesivo de <strong>5 funcionalidades interconectadas</strong> orientadas a resolver la gestión de turnos de caddies y becarios:
+    </p>
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th style="width: 25%;">Funcionalidad</th>
+          <th style="width: 45%;">Descripción Técnica y Operativa</th>
+          <th style="width: 30%;">Rol / Destinatario</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>1. Consulta Dinámica de Turnos AM/PM</strong></td>
+          <td>Búsqueda instantánea por cédula con renderizado reactivo de calendario mensual, diferenciando turnos de Mañana (06:00-13:30), Tarde (12:30-19:00), tutorías de Fundación y descanso.</td>
+          <td>Caddies / Becarios / Socios</td>
+        </tr>
+        <tr>
+          <td><strong>2. Check-in con Geolocalización GPS</strong></td>
+          <td>Captura de coordenadas GPS en tiempo real mediante la API del dispositivo con cálculo geodésico de proximidad a las sedes deportivas (Medellín y Llanogrande).</td>
+          <td>Caddies / Personal de Campo</td>
+        </tr>
+        <tr>
+          <td><strong>3. Evidencia Fotográfica con Cámara</strong></td>
+          <td>Módulo de captura de fotografía en vivo con previsualización, ajuste de encuadre y estampado automático de marca de agua digital con fecha, hora y coordenadas GPS.</td>
+          <td>Caddies / Coordinadores</td>
+        </tr>
+        <tr>
+          <td><strong>4. Editor de Matriz Semanal</strong></td>
+          <td>Panel administrativo con presets rápidos (Todos AM, Todos PM, Alternar) para actualizar la disponibilidad semanal de los becarios respetando sus horarios académicos.</td>
+          <td>Club Managers / Fundación</td>
+        </tr>
+        <tr>
+          <td><strong>5. Auditoría y Ciclo CRUD Completo</strong></td>
+          <td>Bitácora de actividad en tiempo real, registro persistente de asistencias validadas y operaciones completas de creación, edición y eliminación de registros.</td>
+          <td>Administración General</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h2 class="section-header">2. Cambios y Continuidad Respecto al Examen 1</h2>
+    <p>
+      El desarrollo incremental requiere evaluar de forma continua las decisiones iniciales para adaptarse a las necesidades reales del entorno operativo:
+    </p>
+    <ul>
+      <li><strong>Elementos que se mantienen:</strong> El problema raíz identificado (descoordinación y llamadas manuales para asignación de turnos), el universo de usuarios (caddies, becarios y coordinadores), el modelo de turnos AM/PM/Estudio, la jerarquía visual verde institucional y la correspondencia con las planillas de acompañamiento del Club Campestre.</li>
+      <li><strong>Elementos ajustados:</strong> La arquitectura original evolucionó hacia un modelo <strong>Offline-First</strong> prioritario, garantizando que si un caddie no tiene plan de datos o cobertura en la cancha de golf, la aplicación continúe operando localmente sin interrupciones. Se ajustó además la interfaz a un formato mobile-first con barra inferior fija de navegación.</li>
+      <li><strong>Elementos descartados:</strong> Se descartó la exigencia de conexión remota obligatoria para el funcionamiento básico del cliente móvil, evitando que la caída del servidor impida el registro de turnos en sitio.</li>
+      <li><strong>Elementos aplazados para siguientes entregas:</strong> Notificaciones push remotas en segundo plano con Firebase Cloud Messaging (FCM) y sincronización bidireccional continua mediante WebSockets, las cuales se integrarán en el Examen 3.</li>
+    </ul>
+
+    <div class="callout-box">
+      <strong>Principio de Incremento:</strong> La aplicación actual es completamente funcional de manera autónoma, resolviendo el flujo esencial sin requerir todavía dependencias de infraestructura en la nube.
+    </div>
+  </div>
+  <div class="page-footer">
+    <span>CaddiePro — Examen 2: Segundo Incremento del Proyecto</span>
+    <span>Página 1 de 4</span>
+  </div>
+</div>
+
+<!-- =================================================================== -->
+<!-- PÁGINA 2: FLUJO IMPLEMENTADO Y PERSISTENCIA                         -->
+<!-- =================================================================== -->
+<div class="page-sheet">
+  <div class="page-body">
+    <h2 class="section-header">3. Flujo Principal del Prototipo Móvil</h2>
+    <p>
+      El prototipo implementa una secuencia operativa cerrada que va desde la captura inicial de información hasta su consulta y modificación posterior, evitando pantallas estáticas sin lógica:
+    </p>
+
+    <div class="flow-box">
+      <div class="flow-step">1. Capturar<br><span style="font-weight:normal; font-size:7.5pt;">Cédula / GPS / Foto</span></div>
+      <div class="flow-arrow">➔</div>
+      <div class="flow-step">2. Validar<br><span style="font-weight:normal; font-size:7.5pt;">Formato / Radio GPS</span></div>
+      <div class="flow-arrow">➔</div>
+      <div class="flow-step">3. Registrar<br><span style="font-weight:normal; font-size:7.5pt;">Guardado LocalStorage</span></div>
+      <div class="flow-arrow">➔</div>
+      <div class="flow-step">4. Visualizar<br><span style="font-weight:normal; font-size:7.5pt;">Calendario / Historial</span></div>
+      <div class="flow-arrow">➔</div>
+      <div class="flow-step">5. Modificar<br><span style="font-weight:normal; font-size:7.5pt;">Turnos / CRUD</span></div>
+    </div>
+
+    <ol>
+      <li><strong>Capturar Información:</strong> El usuario ingresa su cédula en la vista principal o selecciona un perfil demo. En el módulo de marcación, el caddie pulsa para capturar su ubicación satelital y abre la cámara móvil para registrar su fotografía de llegada con uniforme.</li>
+      <li><strong>Validar Datos y Permisos:</strong> El sistema filtra únicamente dígitos numéricos, consulta la disponibilidad de hardware, solicita los permisos nativos correspondientes y calcula si la posición se encuentra dentro del radio permitido respecto a la caseta del club.</li>
+      <li><strong>Registrar en el Estado:</strong> Se genera una entidad estructurada con sello digital (fecha, hora, coordenadas y estampa Base64) que se inyecta en el estado reactivo y se almacena en el motor de persistencia.</li>
+      <li><strong>Visualizar Resultados:</strong> El caddie observa su calendario mensual con insignias cromáticas de disponibilidad (verde para AM, azul para PM, ámbar para Estudio y gris para Descanso), así como su tarjeta de check-in con las coordenadas y distancia a la sede.</li>
+      <li><strong>Consultar o Modificar:</strong> El coordinador puede acceder al panel administrativo mediante PIN seguro (<span class="code-pill">1234</span>), ajustar la matriz semanal día por día, filtrar por categoría o eliminar registros obsoletos.</li>
+    </ol>
+
+    <h2 class="section-header">4. Arquitectura de Estado y Persistencia Local</h2>
+    <p>
+      Para evitar concentrar arbitrariamente la solución en la capa visual, la aplicación implementa una separación arquitectónica estricta en tres niveles desacoplados:
+    </p>
+
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>Capa</th>
+          <th>Componentes en el Código</th>
+          <th>Responsabilidad</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>1. Interfaz (Vista)</strong></td>
+          <td><span class="code-pill">index.html</span>, <span class="code-pill">styles.css</span></td>
+          <td>Renderizado visual, layout responsive mobile-first, transiciones y captura de eventos táctiles.</td>
+        </tr>
+        <tr>
+          <td><strong>2. Estado / Lógica</strong></td>
+          <td><span class="code-pill">app.js</span> (Objeto <span class="code-pill">App</span>)</td>
+          <td>Enrutador interno de vistas, controladores de hardware (GPS/Cámara), listeners de red y validaciones de negocio.</td>
+        </tr>
+        <tr>
+          <td><strong>3. Datos y Persistencia</strong></td>
+          <td><span class="code-pill">data.js</span> (<span class="code-pill">DataService</span>)</td>
+          <td>Abstracción de almacenamiento local mediante <span class="code-pill">LocalStorage</span> / <span class="code-pill">Capacitor Preferences</span>, serialización JSON y respaldo auditado.</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3 class="subsection-header">Garantía de Persistencia Tras Reinicio</h3>
+    <p>
+      La persistencia es 100% funcional y verificable:
+    </p>
+    <ul>
+      <li><strong>Creación:</strong> Al registrar un nuevo caddie o un check-in de asistencia con foto, la información se serializa de inmediato bajo la clave maestra <span class="code-pill">caddiepro_app_data_v3</span>.</li>
+      <li><strong>Prueba de cierre:</strong> Al recargar la página, cerrar el navegador o reiniciar la aplicación, la función <span class="code-pill">DataService.loadData()</span> restaura el estado idéntico previo.</li>
+      <li><strong>Modificación y Eliminación:</strong> Al alterar los turnos en el editor o eliminar un caddie del roster, la actualización atómica se refleja en el almacenamiento persistente sin pérdida de integridad.</li>
+    </ul>
+  </div>
+  <div class="page-footer">
+    <span>CaddiePro — Examen 2: Segundo Incremento del Proyecto</span>
+    <span>Página 2 de 4</span>
+  </div>
+</div>
+
+<!-- =================================================================== -->
+<!-- PÁGINA 3: CAPACIDADES MÓVILES INTEGRADAS                            -->
+<!-- =================================================================== -->
+<div class="page-sheet">
+  <div class="page-body">
+    <h2 class="section-header">5. Integración con Capacidades del Dispositivo Móvil</h2>
+    <p>
+      En cumplimiento del Requerimiento 6, se integraron dos capacidades intrínsecas del contexto móvil seleccionadas bajo una estricta justificación operativa de campo:
+    </p>
+
+    <h3 class="subsection-header">A. Capacidad Móvil 1: Geolocalización Satelital (GPS)</h3>
+    <ul>
+      <li><strong>¿Qué necesidad del proyecto resuelve?</strong> En los clubes de golf con extensiones superiores a 60 hectáreas, los caddies deben reportarse puntualmente en la caseta de caddies antes del tee de salida. La geolocalización permite validar que el becario se encuentra físicamente en el club (Sede Medellín: 6.202350°, -75.578630° o Sede Llanogrande: 6.130540°, -75.434420°) antes de asignarle bolsa de juego.</li>
+      <li><strong>Algoritmo Geodésico:</strong> La aplicación implementa la <strong>fórmula de Haversine</strong> para calcular la distancia ortodrómica en metros entre las coordenadas GPS emitidas por el sensor móvil y el punto geográfico del club:
+        <br><span class="code-pill">d = 2R · asin(sqrt(sin²(Δlat/2) + cos(lat1)·cos(lat2)·sin²(Δlon/2)))</span></li>
+      <li><strong>Gestión de Permisos:</strong>
+        <ul>
+          <li><em>Permiso Concedido:</em> Se despliega la latitud, longitud, margen de precisión (±m), distancia calculada y el sello de confirmación en verde.</li>
+          <li><em>Permiso Denegado:</em> La aplicación no se bloquea; muestra una alerta pedagógica en ámbar explicando el motivo y habilita el registro asistido con justificación manual.</li>
+        </ul>
+      </li>
+    </ul>
+
+    <h3 class="subsection-header">B. Capacidad Móvil 2: Cámara y Evidencia Fotográfica</h3>
+    <ul>
+      <li><strong>¿Qué necesidad del proyecto resuelve?</strong> Exigencia del Club Campestre sobre el porte correcto del uniforme institucional (gorra, chaleco numerado y carné de la Fundación) al ingresar al turno.</li>
+      <li><strong>Implementación Técnica:</strong> Integración de la API <span class="code-pill">navigator.mediaDevices.getUserMedia</span> con conmutación frontal/trasera, renderizado sobre elemento <span class="code-pill">&lt;video&gt;</span> con cuadrícula de encuadre (viewfinder), extracción de cuadro a <span class="code-pill">&lt;canvas&gt;</span> y generación de imagen JPEG comprimida con marca de agua digital incrustada.</li>
+      <li><strong>Fallback Universal:</strong> Incorpora selector de archivos fotográficos con atributo <span class="code-pill">capture="user"</span> para compatibilidad absoluta en cualquier versión de Android WebView o navegador móvil.</li>
+    </ul>
+
+    <h2 class="section-header">6. Comportamiento Frente a la Conectividad (Network)</h2>
+    <p>
+      Cumpliendo con el Requerimiento 7, la aplicación detecta reactivamente el estado de red mediante eventos <span class="code-pill">online</span> y <span class="code-pill">offline</span> de la ventana global:
+    </p>
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>Estado de Red</th>
+          <th>Comportamiento en la Interfaz</th>
+          <th>Tratamiento de los Datos</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Con Conexión (Online)</strong></td>
+          <td>Banner superior verde con pulso activo: <em>"En Línea • Sincronización Automática Activa"</em>.</td>
+          <td>Consulta y sincroniza automáticamente los datos contra el backend local Express/MongoDB si se encuentra encendido.</td>
+        </tr>
+        <tr>
+          <td><strong>Sin Conexión (Offline-First)</strong></td>
+          <td>Banner superior ámbar visible: <em>"Sin Conexión a Internet • Modo Local Activo"</em>. Notificación toast explicativa.</td>
+          <td>Todas las funciones (consulta, check-in GPS, toma de fotos y edición de turnos) operan al 100% persistiendo en <span class="code-pill">LocalStorage</span>.</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="callout-box">
+      <strong>Mecanismo de Evaluación:</strong> Se incluyó el botón interactivo <strong>"⚡ Simular Offline"</strong> en el encabezado para que el evaluador pueda alternar la desconexión con un solo clic y verificar el funcionamiento fuera de línea sin alterar su conexión física.
+    </div>
+  </div>
+  <div class="page-footer">
+    <span>CaddiePro — Examen 2: Segundo Incremento del Proyecto</span>
+    <span>Página 3 de 4</span>
+  </div>
+</div>
+
+<!-- =================================================================== -->
+<!-- PÁGINA 4: ANDROID, LIMITACIONES Y PRUEBA MÍNIMA                     -->
+<!-- =================================================================== -->
+<div class="page-sheet">
+  <div class="page-body">
+    <h2 class="section-header">7. Ejecución en Android y Entorno Móvil</h2>
+    <p>
+      La aplicación fue concebida con arquitectura híbrida estándar compatible con <strong>Capacitor</strong> y la web móvil moderna:
+    </p>
+    <ul>
+      <li><strong>Configuración Capacitor:</strong> Se estructuró el archivo <span class="code-pill">capacitor.config.json</span> con identificador <span class="code-pill">com.fundacioncampestre.caddiepro</span>, listo para compilar en Android Studio mediante los comandos estándar:
+        <br><span class="code-pill">npx cap add android</span> ➔ <span class="code-pill">npx cap copy</span> ➔ <span class="code-pill">npx cap open android</span>.</li>
+      <li><strong>Experiencia Mobile-First:</strong> Se implementó el archivo <span class="code-pill">manifest.json</span> con modo <span class="code-pill">standalone</span>, safe-areas de pantalla para el notch de dispositivos móviles, y una barra de navegación inferior fija (Bottom Navigation Bar) con iconos táctiles de 48px acordes a los lineamientos de Material Design 3.</li>
+      <li><strong>Demostración Web / Dispositivos:</strong> Ejecutable en dispositivos físicos conectados a la red local WiFi y completamente verificada en el emulador de dispositivos móviles de Chrome / Edge DevTools (resoluciones Pixel 7, Galaxy S20 y iPhone 14).</li>
+    </ul>
+
+    <h2 class="section-header">8. Limitaciones Actuales y Trabajo Futuro</h2>
+    <ul>
+      <li><strong>Limitaciones Actuales:</strong> Las fotografías se almacenan en formato Base64 dentro del almacenamiento local del cliente; en colecciones masivas de check-ins esto demanda mayor memoria en caché. El cálculo GPS asume un radio esférico plano sin considerar altimetría de montaña en Rionegro.</li>
+      <li><strong>Funcionalidades para el Incremento 3:</strong>
+        <ol>
+          <li>Sincronización en segundo plano con base de datos remota MongoDB mediante cola de reintentos (Sync Queue).</li>
+          <li>Notificaciones push nativas para alertar al caddie sobre cambios en su turno 12 horas antes.</li>
+          <li>Generación de código QR dinámico en el carné del caddie para lectura óptica rápida en el máster de caddies.</li>
+        </ol>
+      </li>
+    </ul>
+
+    <h2 class="section-header">9. Secuencia de la Prueba Mínima de Funcionamiento</h2>
+    <p>
+      Para la sustentación presencial o evaluación remota, se diseñó la siguiente secuencia de validación inmediata:
+    </p>
+    <div class="callout-box">
+      <strong>Guía de Validación Paso a Paso:</strong>
+      <ol style="margin-bottom:0;">
+        <li><strong>Inicio:</strong> Abrir la aplicación en <span class="code-pill">http://localhost:5500</span>. Observar banner superior <em>"En Línea"</em>.</li>
+        <li><strong>Flujo Principal:</strong> Hacer clic en el chip demo <em>"Juan Pérez"</em>. Se despliega el calendario interactivo con los turnos AM, PM y de estudio.</li>
+        <li><strong>Capacidad Móvil GPS:</strong> Pulsar <em>"Marcar Asistencia GPS / Foto"</em> ➔ Clic en <em>"Obtener Coordenadas GPS en Vivo"</em>. Se obtienen coordenadas reales con distancia calculada a la sede.</li>
+        <li><strong>Capacidad Móvil Cámara:</strong> Abrir cámara o cargar fotografía de uniforme. Verificar la estampa de agua digital.</li>
+        <li><strong>Guardar Asistencia:</strong> Pulsar <em>"Confirmar y Guardar Asistencia"</em>. Se produce retroalimentación háptica (vibración) y el registro aparece en el historial.</li>
+        <li><strong>Comprobar Persistencia:</strong> Cerrar la pestaña o recargar el navegador (<span class="code-pill">Ctrl + F5</span>). Abrir la aplicación nuevamente: el check-in registrado y la fotografía permanecen intactos.</li>
+        <li><strong>Modificar / Eliminar:</strong> Ingresar al panel Admin (PIN: <span class="code-pill">1234</span>). Editar turnos en la matriz semanal o pulsar el botón de eliminar caddie. Recargar: los cambios se mantienen en la base local.</li>
+      </ol>
+    </div>
+  </div>
+  <div class="page-footer">
+    <span>CaddiePro — Examen 2: Segundo Incremento del Proyecto</span>
+    <span>Página 4 de 4</span>
+  </div>
+</div>
+
+</body>
+</html>

@@ -191,6 +191,25 @@ const INITIAL_DATA = {
       detail: 'Se ajustaron turnos AM/PM para Carlos Ramírez',
       type: 'admin'
     }
+  ],
+  checkins: [
+    {
+      id: 'chk-1',
+      caddieId: '10203040',
+      documentId: '10203040',
+      caddieName: 'Juan Pérez',
+      venue: 'Llanogrande',
+      shift: 'Turno AM',
+      latitude: 6.1305,
+      longitude: -75.4344,
+      accuracy: 8,
+      distanceMeters: 35,
+      time: '05:50 AM',
+      date: 'Hoy',
+      status: 'Aprobado en Sede',
+      hasPhoto: true,
+      notes: 'Llegada puntual para turno matutino de golf'
+    }
   ]
 };
 
@@ -212,6 +231,9 @@ const DataService = {
               });
             }
           });
+        }
+        if (!parsed.checkins || !Array.isArray(parsed.checkins)) {
+          parsed.checkins = INITIAL_DATA.checkins || [];
         }
         return parsed;
       }
@@ -252,12 +274,43 @@ const DataService = {
     return false;
   },
 
+  deleteCaddie(caddieId) {
+    const data = this.loadData();
+    const cleanId = String(caddieId).trim();
+    const index = data.caddies.findIndex(c => c.id === cleanId || c.documentId === cleanId);
+    if (index !== -1) {
+      const removed = data.caddies.splice(index, 1)[0];
+      this.addLog('Caddie Eliminado', `${removed.name} (${removed.documentId}) fue retirado del sistema`, 'admin');
+      this.saveData(data);
+      return true;
+    }
+    return false;
+  },
+
   addCaddie(newCaddie) {
     const data = this.loadData();
     data.caddies.push(newCaddie);
     this.addLog('Nuevo Caddie Registrado', `${newCaddie.name} agregado a ${newCaddie.categoryLabel || newCaddie.category}`, 'admin');
     this.saveData(data);
     return true;
+  },
+
+  saveCheckin(checkinData) {
+    const data = this.loadData();
+    if (!data.checkins) data.checkins = [];
+    data.checkins.unshift(checkinData);
+    if (data.checkins.length > 50) data.checkins.pop();
+    this.addLog('Check-in GPS Registrado', `Asistencia de ${checkinData.caddieName} validada en ${checkinData.venue}`, 'checkin');
+    this.saveData(data);
+    return true;
+  },
+
+  getCheckins(caddieId = null) {
+    const data = this.loadData();
+    if (!data.checkins) return [];
+    if (!caddieId) return data.checkins;
+    const clean = String(caddieId).trim();
+    return data.checkins.filter(c => c.caddieId === clean || c.documentId === clean);
   },
 
   addLog(action, detail, type = 'general') {

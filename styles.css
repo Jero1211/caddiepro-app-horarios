@@ -220,3 +220,130 @@ html.dark .badge-shift-rest {
   color: #9CA3AF;
   border-color: #2D4439;
 }
+
+/* ========================================== */
+/* MOBILE BOTTOM NAVIGATION BAR               */
+/* ========================================== */
+.bottom-nav {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 64px;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-top: 1px solid var(--color-surface-high);
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  z-index: 45;
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+  box-shadow: 0 -4px 20px rgba(8, 47, 34, 0.05);
+}
+
+html.dark .bottom-nav {
+  background: rgba(18, 31, 25, 0.95);
+  border-top: 1px solid #1C2D25;
+  box-shadow: 0 -4px 25px rgba(0, 0, 0, 0.5);
+}
+
+.bottom-nav-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  color: var(--color-text-muted);
+  font-size: 11px;
+  font-weight: 600;
+  flex: 1;
+  height: 100%;
+  transition: all 0.2s ease;
+  cursor: pointer;
+  background: transparent;
+  border: none;
+}
+
+.bottom-nav-item.active {
+  color: var(--color-accent-leaf);
+}
+
+html.dark .bottom-nav-item.active {
+  color: var(--color-accent-mint);
+}
+
+.bottom-nav-item.active .material-symbols-outlined {
+  font-variation-settings: 'FILL' 1, 'wght' 600, 'GRAD' 0, 'opsz' 24;
+  transform: translateY(-2px);
+}
+
+.bottom-nav-item .material-symbols-outlined {
+  font-size: 22px;
+  transition: transform 0.2s ease;
+}
+
+/* ========================================== */
+/* GPS SCAN RADAR EFFECT                      */
+/* ========================================== */
+.radar-scanner {
+  position: relative;
+  width: 90px;
+  height: 90px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.radar-scanner .radar-circle {
+  position: absolute;
+  border-radius: 50%;
+  border: 2px solid rgba(63, 182, 94, 0.5);
+  width: 100%;
+  height: 100%;
+  animation: radarWave 2s infinite cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.radar-scanner .radar-circle:nth-child(2) {
+  animation-delay: 0.6s;
+}
+
+.radar-scanner .radar-circle:nth-child(3) {
+  animation-delay: 1.2s;
+}
+
+@keyframes radarWave {
+  0% { transform: scale(0.3); opacity: 1; }
+  100% { transform: scale(1.4); opacity: 0; }
+}
+
+/* ========================================== */
+/* CAMERA VIEWFINDER OVERLAY                  */
+/* ========================================== */
+.camera-viewfinder {
+  position: relative;
+  overflow: hidden;
+  border-radius: 16px;
+  background: #000000;
+  aspect-ratio: 4 / 3;
+}
+
+.camera-viewfinder video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.viewfinder-corners {
+  position: absolute;
+  inset: 16px;
+  border: 2px dashed rgba(255, 255, 255, 0.4);
+  border-radius: 12px;
+  pointer-events: none;
+}
+
+/* Network banner */
+#network-banner {
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+

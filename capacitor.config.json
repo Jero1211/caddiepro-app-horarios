@@ -1,0 +1,9 @@
+{
+  "appId": "com.fundacioncampestre.caddiepro",
+  "appName": "CaddiePro",
+  "webDir": ".",
+  "bundledWebRuntime": false,
+  "server": {
+    "androidScheme": "https"
+  }
+}
