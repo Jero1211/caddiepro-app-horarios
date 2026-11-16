@@ -90,6 +90,31 @@ async function testAPI() {
     console.log(`\n✅ 9. Bitácora de Auditoría (Logs): ${dataLogs.count} registros almacenados.`);
     console.log('   Último log:', dataLogs.data[0]?.action, '-', dataLogs.data[0]?.detail);
 
+    // 10. Check-in Asistencia Móvil (POST) - Seguimiento 3
+    const resCheckin = await fetch(`${BASE_URL}/asistencias`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        documentId: '1011512703',
+        caddieName: 'ANA BELEN GONZALEZ GOMEZ',
+        venue: 'Llanogrande',
+        shift: 'AM',
+        latitude: 6.130540,
+        longitude: -75.434420,
+        accuracy: 6.2,
+        distanceMeters: 18.4,
+        status: 'Aprobado en Sede',
+        notes: 'Check-in validado con GPS en caseta de golf'
+      })
+    });
+    const dataCheckin = await resCheckin.json();
+    console.log(`\n✅ 10. Registrar Asistencia Móvil (POST):`, dataCheckin.message, '| ID:', dataCheckin.data?._id);
+
+    // 11. Listar Asistencias (GET) - Seguimiento 3
+    const resListChk = await fetch(`${BASE_URL}/asistencias`);
+    const dataListChk = await resListChk.json();
+    console.log(`\n✅ 11. Listar Asistencias (GET): Total registradas = ${dataListChk.count}`);
+
     console.log('\n🎉 ¡TODAS LAS PRUEBAS DE LA API Y MONGODB PASARON CON ÉXITO AL 100%!');
   } catch (err) {
     console.error('❌ Error en las pruebas:', err);

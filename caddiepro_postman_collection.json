@@ -285,6 +285,91 @@
           "response": []
         }
       ]
+    },
+    {
+      "name": "6. Asistencias y Check-in Móvil (Seguimiento 3)",
+      "item": [
+        {
+          "name": "01. Listar Todas las Asistencias",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/asistencias",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "asistencias"]
+            },
+            "description": "Obtiene la lista de todos los check-ins de asistencia registrados por los caddies en sede."
+          },
+          "response": []
+        },
+        {
+          "name": "02. Registrar Check-in Móvil (POST)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"documentId\": \"1011512703\",\n  \"caddieName\": \"ANA BELEN GONZALEZ GOMEZ\",\n  \"venue\": \"Llanogrande\",\n  \"shift\": \"AM\",\n  \"latitude\": 6.130540,\n  \"longitude\": -75.434420,\n  \"accuracy\": 6.5,\n  \"distanceMeters\": 18.4,\n  \"status\": \"Aprobado en Sede\",\n  \"notes\": \"Check-in validado en caseta de golf Llanogrande\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/asistencias",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "asistencias"]
+            },
+            "description": "Registra una nueva asistencia con verificación GPS enviada desde la aplicación móvil."
+          },
+          "response": []
+        },
+        {
+          "name": "03. Actualizar Asistencia / Observación (PUT)",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": \"Aprobado en Sede\",\n  \"notes\": \"Verificado por coordinador de campo\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/asistencias/6afb4c62b8e2eaa0f3a01dc2",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "asistencias", "6afb4c62b8e2eaa0f3a01dc2"]
+            },
+            "description": "Actualiza el estado o notas de supervisión de una asistencia."
+          },
+          "response": []
+        },
+        {
+          "name": "04. Filtrar Asistencias por Sede",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/asistencias?venue=Llanogrande",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "asistencias"],
+              "query": [
+                {
+                  "key": "venue",
+                  "value": "Llanogrande"
+                }
+              ]
+            },
+            "description": "Filtra las asistencias registradas específicamente para la sede Llanogrande o Medellín."
+          },
+          "response": []
+        }
+      ]
     }
   ],
   "variable": [

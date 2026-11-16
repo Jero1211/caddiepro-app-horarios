@@ -6,6 +6,7 @@ const path = require('path');
 const connectDB = require('./config/db');
 const caddieRoutes = require('./routes/caddieRoutes');
 const logRoutes = require('./routes/logRoutes');
+const checkinRoutes = require('./routes/checkinRoutes');
 const Caddie = require('./models/Caddie');
 const { importCaddiesFromExcel } = require('./services/excelImporter');
 
@@ -42,6 +43,8 @@ app.get('/api/health', async (req, res) => {
 // Rutas de la API
 app.use('/api/caddies', caddieRoutes);
 app.use('/api/logs', logRoutes);
+app.use('/api/asistencias', checkinRoutes);
+app.use('/api/checkins', checkinRoutes);
 
 // Ruta raíz de bienvenida y documentación
 app.get('/', (req, res) => {

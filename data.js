@@ -298,11 +298,72 @@ const DataService = {
   saveCheckin(checkinData) {
     const data = this.loadData();
     if (!data.checkins) data.checkins = [];
+    
+    // Asignar estado de sincronización inicial
+    checkinData.synced = false;
     data.checkins.unshift(checkinData);
     if (data.checkins.length > 50) data.checkins.pop();
     this.addLog('Check-in GPS Registrado', `Asistencia de ${checkinData.caddieName} validada en ${checkinData.venue}`, 'checkin');
     this.saveData(data);
+
+    // Intentar sincronizar inmediatamente con el servicio REST remoto si hay conexión
+    if (navigator.onLine) {
+      this.sendCheckinToBackend(checkinData);
+    }
     return true;
+  },
+
+  async sendCheckinToBackend(chk) {
+    try {
+      const response = await fetch(`${this.API_URL}/asistencias`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          documentId: chk.documentId,
+          caddieName: chk.caddieName,
+          venue: chk.venue,
+          shift: chk.shift,
+          latitude: chk.latitude,
+          longitude: chk.longitude,
+          accuracy: chk.accuracy,
+          distanceMeters: chk.distanceMeters,
+          status: chk.status,
+          hasPhoto: chk.hasPhoto,
+          photoUrl: chk.photoUrl,
+          notes: chk.notes
+        })
+      });
+
+      if (response.ok) {
+        const result = await response.json();
+        console.log('[CaddiePro REST] Check-in sincronizado exitosamente con el backend:', result.data?._id);
+        
+        // Marcar como sincronizado localmente
+        const currentData = this.loadData();
+        const found = currentData.checkins?.find(c => c.id === chk.id);
+        if (found) {
+          found.synced = true;
+          found.remoteId = result.data?._id;
+          this.saveData(currentData);
+        }
+        return true;
+      }
+    } catch (err) {
+      console.warn('[CaddiePro REST] No se pudo enviar al backend (quedará pendiente en almacenamiento local):', err.message);
+    }
+    return false;
+  },
+
+  async syncPendingCheckins() {
+    if (!navigator.onLine) return;
+    const data = this.loadData();
+    const pending = (data.checkins || []).filter(c => !c.synced);
+    if (pending.length === 0) return;
+
+    console.log(`[CaddiePro REST] Sincronizando ${pending.length} check-ins pendientes con el servidor...`);
+    for (const chk of pending) {
+      await this.sendCheckinToBackend(chk);
+    }
   },
 
   getCheckins(caddieId = null) {
@@ -368,6 +429,13 @@ const DataService = {
 if (typeof window !== 'undefined') {
   window.addEventListener('DOMContentLoaded', () => {
     DataService.syncWithBackend();
+    DataService.syncPendingCheckins();
+  });
+
+  // Cuando se recupera la conexión a internet, sincronizar los check-ins que quedaron pendientes
+  window.addEventListener('online', () => {
+    console.log('[CaddiePro] Conexión a Internet restablecida. Sincronizando registros pendientes...');
+    DataService.syncPendingCheckins();
   });
 }
 

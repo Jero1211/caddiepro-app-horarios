@@ -13,7 +13,7 @@ const activityLogSchema = new mongoose.Schema({
   },
   type: {
     type: String,
-    enum: ['general', 'admin', 'caddie', 'horario', 'sistema'],
+    enum: ['general', 'admin', 'caddie', 'horario', 'sistema', 'checkin'],
     default: 'general'
   },
   time: {
